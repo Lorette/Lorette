@@ -1,30 +1,25 @@
 #ifndef MATRICE_H
 #define MATRICE_H
 
-#include <QDialog>
+#include <QWidget>
+#include <QLabel>
+#include <QApplication>
+#include <QString>
 
-namespace Ui {
-    class new_Matrice;
-}
-
-class Matrice : public QDialog
+class Matrice
 {
-    Q_OBJECT
 
 public:
-    explicit Matrice(QWidget *parent = 0);
+    explicit Matrice(int taille);
     ~Matrice();
 
 private:
-    QString name;
-    uint taille;
-    Ui::new_Matrice *new_matrice;
+    int taille;
+    uint **val;
 
 public:
-    QString getName();
-
-private slots:
-    void on_buttonBox_accepted();
+    int getTaille();
+    void affichMatrice(QWidget* parent);
 };
 
 #endif // MATRICE_H

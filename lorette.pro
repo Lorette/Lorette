@@ -17,5 +17,4 @@ SOURCES += src/main.cpp\
 HEADERS  += src/mainwindow.h \
     src/matrice.h
 
-FORMS    += src/mainwindow.ui \
-    src/new_matrice.ui
+FORMS    += src/mainwindow.ui

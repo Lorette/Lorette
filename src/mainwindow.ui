@@ -36,7 +36,7 @@
   </widget>
   <widget class="QStatusBar" name="statusBar">
    <property name="cursor">
-    <cursorShape>CrossCursor</cursorShape>
+    <cursorShape>ArrowCursor</cursorShape>
    </property>
   </widget>
   <action name="actionNouvelle_Matrice">
