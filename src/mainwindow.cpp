@@ -17,6 +17,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionNouvelle_Matrice_activated()
 {
-    mat = new Matrice(3);
-    mat->affichMatrice(ui->centralWidget);
+    mat = new Matrice(this->centralWidget(),3);
+    mat->show();
 }

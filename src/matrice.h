@@ -8,20 +8,27 @@
 #include <QSpinBox>
 #include <QTextEdit>
 #include <QMessageBox>
+#include <QScrollBar>
+
 class Matrice : public QWidget
 {
+    Q_OBJECT
+
 public:
-    explicit Matrice(int taille);
+    explicit Matrice(QWidget *parent,int taille);
     ~Matrice();
 
 private:
     int taille;
     int **val;
-    QSpinBox **sb;
+    QSpinBox **m_spin;
+    QScrollBar *m_barre;
 
 public:
-    int getTaille();
-    void affichMatrice(QWidget* parent);
+    void affichMatrice();
+
+private slots:
+    void on_horizontalScrollBar_valueChanged(int value);
 };
 
 #endif // MATRICE_H
