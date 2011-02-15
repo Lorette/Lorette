@@ -5,17 +5,19 @@
 #include <QLabel>
 #include <QApplication>
 #include <QString>
-
-class Matrice
+#include <QSpinBox>
+#include <QTextEdit>
+#include <QMessageBox>
+class Matrice : public QWidget
 {
-
 public:
     explicit Matrice(int taille);
     ~Matrice();
 
 private:
     int taille;
-    uint **val;
+    int **val;
+    QSpinBox **sb;
 
 public:
     int getTaille();

@@ -4,9 +4,10 @@
 Matrice::Matrice(int taille)
 {
     this->taille = taille;
-    val = new uint* [taille];
+    val = new int* [taille];
+    sb = new QSpinBox* [taille];
     for (int i = 0; i < taille; i++)
-        val[i] = new uint[taille];
+        val[i] = new int[taille];
 
     for (int i = 0; i < taille; i++)
         for(int j = 0; j < taille; j++)
@@ -27,16 +28,23 @@ int Matrice::getTaille()
 
 void Matrice::affichMatrice(QWidget* parent)
 {
-    QLabel *l = new QLabel(parent);
-    QLabel *mat = new QLabel(parent);
+    char c = 'A';
+    QLabel **x = new QLabel* [taille];
 
-    l->setText("Taille de la matrice :" + QString::number(this->taille));
-    mat->setGeometry(QRect(80, 40, 241, 15*taille));
-    for(int i = 0;i<taille;i++)
-    {    for(int j = 0;j<taille;j++)
-            mat->setText(mat->text() +QString::number(val[i][j]) + ('A' +j) + " + ");
-        mat->setText(mat->text() +"\n");
+    for(int i = 0;i < taille;i++)
+    {
+        for(int j = 0;j < taille;j++,c++)
+        {
+            x[i] = new QLabel(parent);
+            sb[i] = new QSpinBox(parent);
+            sb[i]->setValue(*val[i]);
+            sb[i]->setGeometry(QRect(40*j+20, 20*i+10, 30, 20));
+            x[i]->setText(QString::fromAscii(&c));
+            x[i]->setGeometry(QRect(40*j+52,20*i+10,6,20));
+            x[i]->show();
+            sb[i]->show();
+        }
+
+        c = 'A';
     }
-    l->show();
-    mat->show();
 }
