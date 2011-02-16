@@ -6,6 +6,8 @@
 #include <QApplication>
 #include <QString>
 #include <QSpinBox>
+#include <QFile>
+#include <QMessageBox>
 
 class Matrice : public QWidget
 {
@@ -16,12 +18,19 @@ public:
     ~Matrice();
 
 private:
+    QFile *m_file;
     int taille;
     int **val;
     QSpinBox **m_spin;
 
 public:
+    QFile *getm_file();
+    void setm_file(QString f);
     void affichMatrice();
+    void methode1();
+    void methode2();
+    void methode3();
+    void save();
 
 };
 

@@ -25,8 +25,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>271</width>
-         <height>257</height>
+         <width>279</width>
+         <height>280</height>
         </rect>
        </property>
       </widget>
@@ -38,7 +38,7 @@
        <enum>Qt::Horizontal</enum>
       </property>
       <property name="standardButtons">
-       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       <set>QDialogButtonBox::NoButton</set>
       </property>
      </widget>
     </item>
@@ -49,23 +49,23 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
+        <widget class="QRadioButton" name="radioButton">
+         <property name="text">
+          <string>Méthode 1</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QRadioButton" name="radioButton_2">
          <property name="text">
-          <string>RadioButton</string>
+          <string>Méthode 2</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QRadioButton" name="radioButton_3">
          <property name="text">
-          <string>RadioButton</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="radioButton">
-         <property name="text">
-          <string>RadioButton</string>
+          <string>Méthode 3</string>
          </property>
         </widget>
        </item>
@@ -102,6 +102,8 @@
     </property>
     <addaction name="actionNouvelle_Matrice"/>
     <addaction name="actionOuvrir_Matrice"/>
+    <addaction name="actionEnregistrer"/>
+    <addaction name="actionEnregistrer_Sous"/>
     <addaction name="separator"/>
     <addaction name="actionQuitter"/>
    </widget>
@@ -143,6 +145,22 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionEnregistrer">
+   <property name="text">
+    <string>Enregistrer</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionEnregistrer_Sous">
+   <property name="text">
+    <string>Enregistrer sous...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
  </widget>
