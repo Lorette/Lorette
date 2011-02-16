@@ -1,12 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QInputDialog>
+
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     mat = NULL;
-}
+    QPushButton *butt = ui->buttonBox->button(QDialogButtonBox::Cancel);
+    butt->setText("Fils de pute");
+    }
 
 MainWindow::~MainWindow()
 {
@@ -17,6 +19,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionNouvelle_Matrice_activated()
 {
-    mat = new Matrice(this->centralWidget(),3);
+    mat = new Matrice(ui->scrollArea,10);
+    ui->scrollArea->setWidget(mat);
     mat->show();
 }

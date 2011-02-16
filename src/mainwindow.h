@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QScrollArea>
+#include <QHBoxLayout>
+
 #include "matrice.h"
 
 namespace Ui {
@@ -19,7 +22,6 @@ public:
 private:
     Matrice *mat;
     Ui::MainWindow *ui;
-
 
 private slots:
     void on_actionNouvelle_Matrice_activated();

@@ -6,9 +6,6 @@
 #include <QApplication>
 #include <QString>
 #include <QSpinBox>
-#include <QTextEdit>
-#include <QMessageBox>
-#include <QScrollBar>
 
 class Matrice : public QWidget
 {
@@ -22,13 +19,10 @@ private:
     int taille;
     int **val;
     QSpinBox **m_spin;
-    QScrollBar *m_barre;
 
 public:
     void affichMatrice();
 
-private slots:
-    void on_horizontalScrollBar_valueChanged(int value);
 };
 
 #endif // MATRICE_H

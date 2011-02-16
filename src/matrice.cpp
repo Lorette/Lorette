@@ -4,7 +4,7 @@
 Matrice::Matrice(QWidget *parent,int taille) : QWidget(parent)
 {
     this->taille = taille;
-
+    setMinimumSize(42*taille,21*taille);
     val = new int* [taille];
     for (int i = 0; i < taille; i++)
         val[i] = new int[taille];
@@ -15,9 +15,6 @@ Matrice::Matrice(QWidget *parent,int taille) : QWidget(parent)
 
     m_spin = new QSpinBox* [taille];
 
-    m_barre = new QScrollBar(Qt::Horizontal,this);
-    m_barre->setGeometry(10, 60, 150, 20);
-    connect(m_barre,SIGNAL(valueChanged(int)),this,SLOT(on_horizontalScrollBar_valueChanged(int)));
     this->affichMatrice();
 }
 
@@ -30,7 +27,6 @@ Matrice::~Matrice()
     }
     delete [] val;
     delete [] m_spin;
-    delete m_barre;
 }
 
 void Matrice::affichMatrice()
@@ -54,9 +50,4 @@ void Matrice::affichMatrice()
 
         c = 'A';
     }
-}
-
-void Matrice::on_horizontalScrollBar_valueChanged(int value)
-{
-    this->move(value,this->height());
 }
