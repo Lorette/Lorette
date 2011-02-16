@@ -6,9 +6,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),ui(new Ui::MainWin
 {
     ui->setupUi(this);
     mat = NULL;
-    QPushButton *butt = ui->buttonBox->button(QDialogButtonBox::Cancel);
-    butt->setText("Fils de pute");
-    }
+}
 
 MainWindow::~MainWindow()
 {
