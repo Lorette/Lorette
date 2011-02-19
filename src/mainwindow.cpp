@@ -29,7 +29,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionNouvelle_Matrice_activated()
 {
-    mat = new Matrice(ui->scrollArea,10);
+    mat = new Matrice(ui->scrollArea,3);
     ui->scrollArea->setWidget(mat);
     mat->show();
 }
@@ -98,7 +98,18 @@ void MainWindow::on_actionEnregistrer_Sous_triggered()
         return;
     }
 
-     mat->setm_file(QFileDialog::getSaveFileName(this));
+    mat->setm_file(QFileDialog::getSaveFileName(0,0,0,".lor"));
+
      mat->save();
 
+}
+
+void MainWindow::on_actionOuvrir_Matrice_triggered()
+{
+    if(mat != NULL)
+        mat->~Matrice();
+    mat = NULL;
+    mat = new Matrice(ui->scrollArea,QFileDialog::getOpenFileName());
+    ui->scrollArea->setWidget(mat);
+    mat->show();
 }

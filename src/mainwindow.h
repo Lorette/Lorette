@@ -28,6 +28,7 @@ private:
     int methode;
 
 private slots:
+    void on_actionOuvrir_Matrice_triggered();
     void on_actionEnregistrer_Sous_triggered();
     void on_actionEnregistrer_triggered();
     void on_radioButton_clicked();

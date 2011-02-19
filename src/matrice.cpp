@@ -6,18 +6,58 @@ Matrice::Matrice(QWidget *parent,int taille) : QWidget(parent)
     this->taille = taille;
     this->m_file = NULL;
 
-    setMinimumSize(42*taille,21*taille);
-
     val = new int* [taille];
     for (int i = 0; i < taille; i++)
         val[i] = new int[taille];
     for (int i = 0; i < taille; i++)
         for(int j = 0; j < taille; j++)
-            val[i][j] = 1;
+            val[i][j] = 0;
+
+    this->createMatrice();
+}
+
+Matrice::Matrice(QWidget *parent,QString f) : QWidget(parent)
+{
+    QString str;
+
+    this->setm_file(f);
+
+    if (!m_file->open(QFile::ReadOnly))
+    {
+        QMessageBox::warning(this, "Erreur",
+                             "Pov tache");
+        return;
+    }
+
+    QTextStream in(m_file);
+    in >> str;
+    m_file->close();
+
+    QStringList m_list = str.split("%");
+    QStringList m_list2;
+
+    taille = m_list.count()-1;
+
+    val = new int* [taille];
+    for (int i = 0; i < taille; i++)
+        val[i] = new int[taille];
+
+    for(int i = 0; i < taille; i++)
+    {
+        m_list2 = ((QString) m_list.at(i)).split("#");
+        for(int j = 0;j<taille;j++)
+            val[i][j] = ((QString) m_list2.at(j)).toInt();
+    }
+
+    this->createMatrice();
+}
 
 
-    m_spin = new QSpinBox* [taille];
-
+void Matrice::createMatrice()
+{
+    setMinimumSize(42*taille,21*taille);
+    m_spin = NULL;
+    connect(this,SIGNAL(clicked()),this,SLOT(on_click()));
     this->affichMatrice();
 }
 
@@ -26,10 +66,15 @@ Matrice::~Matrice()
     for (int i = 0; i < taille; i++)
     {
           delete [] val[i];
-          delete m_spin[i];
     }
     delete [] val;
-    delete [] m_spin;
+    if(m_spin != NULL)
+    {
+        delete m_spin;
+        delete m_label_modifying;
+        delete m_file;
+    }
+
 }
 
 
@@ -40,24 +85,19 @@ QFile* Matrice::getm_file()
 
 void Matrice::affichMatrice()
 {
-    char c = 'A';
-    QLabel **x = new QLabel* [taille];
+    Label **x = new Label* [taille];
 
     for(int i = 0;i < taille;i++)
     {
-        for(int j = 0;j < taille;j++,c++)
+        for(int j = 0;j < taille;j++)
         {
-            x[i] = new QLabel(this);
-            m_spin[i] = new QSpinBox(this);
-            m_spin[i]->setValue(*val[i]);
-            m_spin[i]->setGeometry(QRect(40*j+20, 20*i+10, 30, 20));
-            x[i]->setText(QString::fromAscii(&c));
+            x[i] = new Label(this,i,j);
+            x[i]->setText(QString::number(val[i][j]));
+            connect(x[i],SIGNAL(clicked(Label*)),this,SLOT(on_label_click(Label*)));
             x[i]->setGeometry(QRect(40*j+52,20*i+10,6,20));
             x[i]->show();
-            m_spin[i]->show();
         }
 
-        c = 'A';
     }
 }
 
@@ -89,5 +129,43 @@ void Matrice::save()
                              "Pov tache");
         return;
     }
-    // A compléter
+
+    QTextStream out(m_file);
+    //out.setVersion(QDataStream::Qt_4_7);
+
+    for(int i=0;i<taille;i++)
+    {
+        for(int j=0;j<taille;j++)
+            out << QString::number(val[i][j])+"#";
+        out << "%";
+    }
+
+    m_file->close();
+}
+
+void Matrice::on_label_click(Label *l)
+{
+   if(m_spin != NULL)
+      delete m_spin;
+
+    m_spin = new QSpinBox(this);
+    m_label_modifying = l;
+    m_spin->setGeometry(QRect(l->geometry().left()-3,l->geometry().top(),30,20));
+    connect(m_spin,SIGNAL(valueChanged(int)),this,SLOT(on_finished_changed(int)));
+    m_spin->setValue(l->text().toInt());
+    m_spin->show();
+
+}
+
+void Matrice::on_finished_changed(int value)
+{
+    m_label_modifying->setText(QString::number(value));
+    val[m_label_modifying->getm_x()][m_label_modifying->getm_y()] = value;
+}
+
+void Matrice::on_click()
+{
+    if(m_spin != NULL)
+       delete m_spin;
+    m_spin = NULL;
 }
