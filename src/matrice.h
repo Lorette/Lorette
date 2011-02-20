@@ -9,6 +9,10 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QTextStream>
+#include <vector>
+#include <QLayout>
+#include <QLayoutItem>
+#include <math.h>
 #include "label.h"
 
 class Matrice : public QWidget
@@ -16,16 +20,17 @@ class Matrice : public QWidget
     Q_OBJECT
 
 public:
-    explicit Matrice(QWidget *parent,int taille);
+    explicit Matrice(QWidget *parent);
     explicit Matrice(QWidget *parent,QString f);
     ~Matrice();
 
 private:
     QFile *m_file;
     int taille;
-    int **val;
+    std::vector< std::vector<int> > val;
     QSpinBox *m_spin;
     Label *m_label_modifying;
+    Label ***m_label;
 
 public:
     QFile *getm_file();
@@ -36,6 +41,7 @@ public:
     void methode3();
     void save();
     void createMatrice();
+    void modify_taille(int t);
 
 private slots:
     void on_click();

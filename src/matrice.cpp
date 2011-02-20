@@ -1,17 +1,13 @@
 #include "matrice.h"
 
 
-Matrice::Matrice(QWidget *parent,int taille) : QWidget(parent)
+Matrice::Matrice(QWidget *parent) : QWidget(parent)
 {
-    this->taille = taille;
+    this->taille = 1;
     this->m_file = NULL;
 
-    val = new int* [taille];
-    for (int i = 0; i < taille; i++)
-        val[i] = new int[taille];
-    for (int i = 0; i < taille; i++)
-        for(int j = 0; j < taille; j++)
-            val[i][j] = 0;
+    val.resize(taille);
+    val[0].resize(taille);
 
     this->createMatrice();
 }
@@ -24,8 +20,6 @@ Matrice::Matrice(QWidget *parent,QString f) : QWidget(parent)
 
     if (!m_file->open(QFile::ReadOnly))
     {
-        QMessageBox::warning(this, "Erreur",
-                             "Pov tache");
         return;
     }
 
@@ -38,9 +32,10 @@ Matrice::Matrice(QWidget *parent,QString f) : QWidget(parent)
 
     taille = m_list.count()-1;
 
-    val = new int* [taille];
+    val.resize(taille);
     for (int i = 0; i < taille; i++)
-        val[i] = new int[taille];
+        val[i].resize(taille);
+
 
     for(int i = 0; i < taille; i++)
     {
@@ -63,16 +58,18 @@ void Matrice::createMatrice()
 
 Matrice::~Matrice()
 {
-    for (int i = 0; i < taille; i++)
-    {
-          delete [] val[i];
-    }
-    delete [] val;
     if(m_spin != NULL)
     {
         delete m_spin;
         delete m_label_modifying;
         delete m_file;
+    }
+
+    for(int i = 0; i < taille; i++)
+    {
+        for(int j = 0; j < taille; j++)
+            delete m_label[i][j];
+        delete [] m_label[i];
     }
 
 }
@@ -85,17 +82,19 @@ QFile* Matrice::getm_file()
 
 void Matrice::affichMatrice()
 {
-    Label **x = new Label* [taille];
+    m_label = new Label** [taille];
+    for (int i = 0; i < taille; i++)
+        m_label[i] = new Label* [taille];
 
     for(int i = 0;i < taille;i++)
     {
         for(int j = 0;j < taille;j++)
         {
-            x[i] = new Label(this,i,j);
-            x[i]->setText(QString::number(val[i][j]));
-            connect(x[i],SIGNAL(clicked(Label*)),this,SLOT(on_label_click(Label*)));
-            x[i]->setGeometry(QRect(40*j+52,20*i+10,40,20));
-            x[i]->show();
+            m_label[i][j] = new Label(this,i,j);
+            m_label[i][j]->setText(QString::number(val[i][j]));
+            connect(m_label[i][j],SIGNAL(clicked(Label*)),this,SLOT(on_label_click(Label*)));
+            m_label[i][j]->setGeometry(QRect(40*j+52,20*i+10,40,20));
+            m_label[i][j]->show();
         }
 
     }
@@ -130,7 +129,6 @@ void Matrice::save()
     }
 
     QTextStream out(m_file);
-    //out.setVersion(QDataStream::Qt_4_7);
 
     for(int i=0;i<taille;i++)
     {
@@ -168,4 +166,29 @@ void Matrice::on_click()
     if(m_spin != NULL)
        delete m_spin;
     m_spin = NULL;
+}
+
+void Matrice::modify_taille(int t)
+{
+    if(taille == 1 && t == -1)
+        return;
+
+    for(int i = 0; i < taille; i++)
+    {
+        for(int j = 0; j < taille; j++)
+            delete m_label[i][j];
+        delete [] m_label[i];
+    }
+
+    delete [] m_label;
+
+    taille=taille+t;
+
+    val.resize(taille);
+    for(int i = 0;i < taille;i++)
+        val[i].resize(taille);
+    setMinimumSize(42*taille,21*taille);
+
+
+    this->affichMatrice();
 }

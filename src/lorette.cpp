@@ -31,7 +31,7 @@ Lorette::~Lorette()
 
 void Lorette::on_actionNouvelle_Matrice_activated()
 {
-    mat = new Matrice(ui->scrollArea,3);
+    mat = new Matrice(ui->scrollArea);
     ui->scrollArea->setWidget(mat);
     mat->show();
 }
@@ -114,19 +114,24 @@ void Lorette::on_actionOuvrir_Matrice_triggered()
     {
         if(mat != NULL)
             mat->~Matrice();
-        mat = new Matrice(ui->scrollArea,QFileDialog::getOpenFileName());
+        mat = new Matrice(ui->scrollArea,file);
         ui->scrollArea->setWidget(mat);
         mat->show();
+        this->setWindowTitle(this->windowTitle() + " - " +file);
     }
 }
 
 void Lorette::on_pushButton_clicked()
 {
+    if(mat == NULL)
+        on_actionNouvelle_Matrice_activated();
 
+    mat->modify_taille(1);
 }
 
 void Lorette::on_pushButton_2_clicked()
 {
-
+    if(mat != NULL)
+        mat->modify_taille(-1);
 }
 
