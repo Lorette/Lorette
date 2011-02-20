@@ -1,9 +1,10 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "lorette.h"
+#include "ui_lorette.h"
 
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),ui(new Ui::MainWindow)
+Lorette::Lorette(QWidget *parent) : QMainWindow(parent),ui(new Ui::Lorette)
 {
+    this->setWindowTitle("Pov Tache");
     ui->setupUi(this);
 
     m_button_exec = new QPushButton("Executer",ui->buttonBox);
@@ -15,9 +16,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),ui(new Ui::MainWin
     connect(m_button_quit,SIGNAL(clicked()),this,SLOT(on_actionQuitter_triggered()));
 
     mat = NULL;
+    methode = 1;
 }
 
-MainWindow::~MainWindow()
+Lorette::~Lorette()
 {
     delete ui;
     if(mat != NULL)
@@ -27,19 +29,19 @@ MainWindow::~MainWindow()
     delete m_button_quit;
 }
 
-void MainWindow::on_actionNouvelle_Matrice_activated()
+void Lorette::on_actionNouvelle_Matrice_activated()
 {
     mat = new Matrice(ui->scrollArea,3);
     ui->scrollArea->setWidget(mat);
     mat->show();
 }
 
-void MainWindow::on_actionQuitter_triggered()
+void Lorette::on_actionQuitter_triggered()
 {
     QApplication::quit();
 }
 
-void MainWindow::on_clickm_button_exec()
+void Lorette::on_clickm_button_exec()
 {
     if(mat == NULL)
     {
@@ -60,26 +62,26 @@ void MainWindow::on_clickm_button_exec()
 }
 
 
-void MainWindow::on_radioButton_clicked()
+void Lorette::on_radioButton_clicked()
 {
     methode = 1;
 }
 
-void MainWindow::on_radioButton_2_clicked()
+void Lorette::on_radioButton_2_clicked()
 {
     methode = 2;
 }
 
-void MainWindow::on_radioButton_3_clicked()
+void Lorette::on_radioButton_3_clicked()
 {
     methode = 3;
 }
 
-void MainWindow::on_actionEnregistrer_triggered()
+void Lorette::on_actionEnregistrer_triggered()
 {
     if(mat == NULL)
     {
-        QMessageBox::information(this,"Mais arrete ....","Eh ! Y'a pas de matrice charger",QMessageBox::Close);
+        QMessageBox::information(this,"Mais arrete ....","Batard ya rien a enregistrer",QMessageBox::Close);
         return;
     }
 
@@ -90,26 +92,41 @@ void MainWindow::on_actionEnregistrer_triggered()
 
 }
 
-void MainWindow::on_actionEnregistrer_Sous_triggered()
+void Lorette::on_actionEnregistrer_Sous_triggered()
 {
     if(mat == NULL)
     {
-        QMessageBox::information(this,"Mais arrete ....","Eh ! Y'a pas de matrice charger",QMessageBox::Close);
+        QMessageBox::information(this,"Mais arrete ....","Batard ya rien a enregistrer",QMessageBox::Close);
         return;
     }
 
-    mat->setm_file(QFileDialog::getSaveFileName(0,0,0,".lor"));
+    mat->setm_file(QFileDialog::getSaveFileName(0,0,0,"Lorette Files (*.lor)"));
 
      mat->save();
 
 }
 
-void MainWindow::on_actionOuvrir_Matrice_triggered()
+void Lorette::on_actionOuvrir_Matrice_triggered()
 {
-    if(mat != NULL)
-        mat->~Matrice();
-    mat = NULL;
-    mat = new Matrice(ui->scrollArea,QFileDialog::getOpenFileName());
-    ui->scrollArea->setWidget(mat);
-    mat->show();
+
+    QString file = QFileDialog::getOpenFileName();
+    if(file != "")
+    {
+        if(mat != NULL)
+            mat->~Matrice();
+        mat = new Matrice(ui->scrollArea,QFileDialog::getOpenFileName());
+        ui->scrollArea->setWidget(mat);
+        mat->show();
+    }
 }
+
+void Lorette::on_pushButton_clicked()
+{
+
+}
+
+void Lorette::on_pushButton_2_clicked()
+{
+
+}
+

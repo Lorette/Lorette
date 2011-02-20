@@ -94,7 +94,7 @@ void Matrice::affichMatrice()
             x[i] = new Label(this,i,j);
             x[i]->setText(QString::number(val[i][j]));
             connect(x[i],SIGNAL(clicked(Label*)),this,SLOT(on_label_click(Label*)));
-            x[i]->setGeometry(QRect(40*j+52,20*i+10,6,20));
+            x[i]->setGeometry(QRect(40*j+52,20*i+10,40,20));
             x[i]->show();
         }
 
@@ -125,8 +125,7 @@ void Matrice::save()
 {
     if (!m_file->open(QFile::WriteOnly))
     {
-        QMessageBox::warning(this, "Erreur",
-                             "Pov tache");
+        m_file = NULL;
         return;
     }
 
@@ -149,8 +148,9 @@ void Matrice::on_label_click(Label *l)
       delete m_spin;
 
     m_spin = new QSpinBox(this);
+    m_spin->setMaximum(999);
     m_label_modifying = l;
-    m_spin->setGeometry(QRect(l->geometry().left()-3,l->geometry().top(),30,20));
+    m_spin->setGeometry(QRect(l->geometry().left()-3,l->geometry().top(),40,20));
     connect(m_spin,SIGNAL(valueChanged(int)),this,SLOT(on_finished_changed(int)));
     m_spin->setValue(l->text().toInt());
     m_spin->show();

@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef LORETTE_H
+#define LORETTE_H
 
 #include <QMainWindow>
 #include <QScrollArea>
@@ -9,25 +9,27 @@
 #include "matrice.h"
 
 namespace Ui {
-    class MainWindow;
+    class Lorette;
 }
 
-class MainWindow : public QMainWindow
+class Lorette : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    explicit Lorette(QWidget *parent = 0);
+    ~Lorette();
 
 private:
     QPushButton *m_button_exec;
     QPushButton *m_button_quit;
     Matrice *mat;
-    Ui::MainWindow *ui;
+    Ui::Lorette *ui;
     int methode;
 
 private slots:
+    void on_pushButton_clicked();
+    void on_pushButton_2_clicked();
     void on_actionOuvrir_Matrice_triggered();
     void on_actionEnregistrer_Sous_triggered();
     void on_actionEnregistrer_triggered();
@@ -39,4 +41,4 @@ private slots:
     void on_clickm_button_exec();
 };
 
-#endif // MAINWINDOW_H
+#endif // LORETTE_H
