@@ -20,12 +20,15 @@ public:
     explicit Lorette(QWidget *parent = 0);
     ~Lorette();
 
+
 private:
     QPushButton *m_button_exec;
     QPushButton *m_button_quit;
     Matrice *mat;
     Ui::Lorette *ui;
     int methode;
+    QString name;
+
 
 private slots:
     void on_pushButton_clicked();

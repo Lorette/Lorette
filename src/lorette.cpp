@@ -4,9 +4,8 @@
 
 Lorette::Lorette(QWidget *parent) : QMainWindow(parent),ui(new Ui::Lorette)
 {
-    this->setWindowTitle("Pov Tache");
     ui->setupUi(this);
-
+    name = this->windowTitle();
     m_button_exec = new QPushButton("Executer",ui->buttonBox);
     m_button_quit = new QPushButton("Quitter",ui->buttonBox);
     ui->buttonBox->addButton(m_button_exec,QDialogButtonBox::NoRole);
@@ -33,6 +32,7 @@ void Lorette::on_actionNouvelle_Matrice_activated()
 {
     mat = new Matrice(ui->scrollArea);
     ui->scrollArea->setWidget(mat);
+    this->setWindowTitle(name +" - Nouvelle Matrice");
     mat->show();
 }
 
@@ -95,14 +95,15 @@ void Lorette::on_actionEnregistrer_triggered()
 void Lorette::on_actionEnregistrer_Sous_triggered()
 {
     if(mat == NULL)
-    {
-        QMessageBox::information(this,"Mais arrete ....","Batard ya rien a enregistrer",QMessageBox::Close);
         return;
+
+    QString str = QFileDialog::getSaveFileName(0,0,0,"Lorette Files (*.lor)");
+    if(str != NULL)
+    {
+        mat->setm_file(str);
+        this->setWindowTitle(name +" - " +str);
+        mat->save();
     }
-
-    mat->setm_file(QFileDialog::getSaveFileName(0,0,0,"Lorette Files (*.lor)"));
-
-     mat->save();
 
 }
 
@@ -117,7 +118,7 @@ void Lorette::on_actionOuvrir_Matrice_triggered()
         mat = new Matrice(ui->scrollArea,file);
         ui->scrollArea->setWidget(mat);
         mat->show();
-        this->setWindowTitle(this->windowTitle() + " - " +file);
+        this->setWindowTitle(name + " - " +file);
     }
 }
 

@@ -9,10 +9,11 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QTextStream>
-#include <vector>
+#include <QVector>
 #include <QLayout>
 #include <QLayoutItem>
 #include <math.h>
+#include "resultat.h"
 #include "label.h"
 
 class Matrice : public QWidget
@@ -27,10 +28,11 @@ public:
 private:
     QFile *m_file;
     int taille;
-    std::vector< std::vector<int> > val;
+    QVector< QVector<int> > val;
     QSpinBox *m_spin;
     Label *m_label_modifying;
     Label ***m_label;
+    Resultat *m_result;
 
 public:
     QFile *getm_file();

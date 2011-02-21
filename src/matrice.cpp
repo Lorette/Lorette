@@ -50,6 +50,7 @@ Matrice::Matrice(QWidget *parent,QString f) : QWidget(parent)
 
 void Matrice::createMatrice()
 {
+    m_result = NULL;
     setMinimumSize(42*taille,21*taille);
     m_spin = NULL;
     connect(this,SIGNAL(clicked()),this,SLOT(on_click()));
@@ -102,13 +103,19 @@ void Matrice::affichMatrice()
 
 void Matrice::methode1()
 {
-    std::vector< std::vector<int> > a = this->val;
+    QVector< QVector<int> > a = this->val;
+    int etape;
     int pivot;
     int repere;
 
-    for(int etape = 0;etape<taille-1;etape++)
+    m_result = new Resultat();
+    m_result->setWindowTitle("Résultat :Pivot de Gauss");
+    m_result->show();
+
+    for(etape = 0;etape<taille-1;etape++)
     {
         pivot = a[etape][etape];
+        m_result->ajouterResultat(a,"Etape " +QString::number(etape));
         for(int i = etape+1;i < taille;i++)
         {
             repere = a[i][etape];
@@ -116,7 +123,13 @@ void Matrice::methode1()
                 a[i][j] = pivot*a[i][j] - repere*a[etape][j];
         }
     }
+
+    m_result->ajouterResultat(a,"Etape " +QString::number(etape));
     //La matrice est échelonnée ya pu qua trouver les valeurs ....
+
+
+
+
 }
 
 
@@ -199,7 +212,6 @@ void Matrice::modify_taille(int t)
     delete [] m_label;
 
     taille=taille+t;
-
     val.resize(taille);
     for(int i = 0;i < taille;i++)
         val[i].resize(taille+1);

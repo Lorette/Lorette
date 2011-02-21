@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Lorette</string>
   </property>
+  <property name="documentMode">
+   <bool>true</bool>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
