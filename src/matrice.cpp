@@ -7,7 +7,7 @@ Matrice::Matrice(QWidget *parent) : QWidget(parent)
     this->m_file = NULL;
 
     val.resize(taille);
-    val[0].resize(taille);
+    val[0].resize(taille+1);
 
     this->createMatrice();
 }
@@ -34,13 +34,13 @@ Matrice::Matrice(QWidget *parent,QString f) : QWidget(parent)
 
     val.resize(taille);
     for (int i = 0; i < taille; i++)
-        val[i].resize(taille);
+        val[i].resize(taille+1);
 
 
     for(int i = 0; i < taille; i++)
     {
         m_list2 = ((QString) m_list.at(i)).split("#");
-        for(int j = 0;j<taille;j++)
+        for(int j = 0;j<taille+1;j++)
             val[i][j] = ((QString) m_list2.at(j)).toInt();
     }
 
@@ -60,15 +60,15 @@ Matrice::~Matrice()
 {
     if(m_spin != NULL)
     {
-        delete m_spin;
-        delete m_label_modifying;
+        //delete m_spin;
+        //delete m_label_modifying;
         delete m_file;
     }
 
     for(int i = 0; i < taille; i++)
     {
-        for(int j = 0; j < taille; j++)
-            delete m_label[i][j];
+        for(int j = 0; j < taille+1; j++)
+                delete m_label[i][j];
         delete [] m_label[i];
     }
 
@@ -84,11 +84,11 @@ void Matrice::affichMatrice()
 {
     m_label = new Label** [taille];
     for (int i = 0; i < taille; i++)
-        m_label[i] = new Label* [taille];
+        m_label[i] = new Label* [taille+1];
 
     for(int i = 0;i < taille;i++)
     {
-        for(int j = 0;j < taille;j++)
+        for(int j = 0;j < taille+1;j++)
         {
             m_label[i][j] = new Label(this,i,j);
             m_label[i][j]->setText(QString::number(val[i][j]));
@@ -102,8 +102,23 @@ void Matrice::affichMatrice()
 
 void Matrice::methode1()
 {
-    QMessageBox::information(this,"Methode 1","C'est la methode 1",QMessageBox::Close);
+    std::vector< std::vector<int> > a = this->val;
+    int pivot;
+    int repere;
+
+    for(int etape = 0;etape<taille-1;etape++)
+    {
+        pivot = a[etape][etape];
+        for(int i = etape+1;i < taille;i++)
+        {
+            repere = a[i][etape];
+            for(int j = etape; j < taille+1;j++)
+                a[i][j] = pivot*a[i][j] - repere*a[etape][j];
+        }
+    }
+    //La matrice est échelonnée ya pu qua trouver les valeurs ....
 }
+
 
 void Matrice::methode2()
 {
@@ -132,7 +147,7 @@ void Matrice::save()
 
     for(int i=0;i<taille;i++)
     {
-        for(int j=0;j<taille;j++)
+        for(int j=0;j<taille+1;j++)
             out << QString::number(val[i][j])+"#";
         out << "%";
     }
@@ -147,6 +162,7 @@ void Matrice::on_label_click(Label *l)
 
     m_spin = new QSpinBox(this);
     m_spin->setMaximum(999);
+    m_spin->setMinimum(-999);
     m_label_modifying = l;
     m_spin->setGeometry(QRect(l->geometry().left()-3,l->geometry().top(),40,20));
     connect(m_spin,SIGNAL(valueChanged(int)),this,SLOT(on_finished_changed(int)));
@@ -175,7 +191,7 @@ void Matrice::modify_taille(int t)
 
     for(int i = 0; i < taille; i++)
     {
-        for(int j = 0; j < taille; j++)
+        for(int j = 0; j < taille+1; j++)
             delete m_label[i][j];
         delete [] m_label[i];
     }
@@ -186,7 +202,7 @@ void Matrice::modify_taille(int t)
 
     val.resize(taille);
     for(int i = 0;i < taille;i++)
-        val[i].resize(taille);
+        val[i].resize(taille+1);
     setMinimumSize(42*taille,21*taille);
 
 
