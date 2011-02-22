@@ -41,7 +41,7 @@ Matrice::Matrice(QWidget *parent,QString f) : QWidget(parent)
     {
         m_list2 = ((QString) m_list.at(i)).split("#");
         for(int j = 0;j<taille+1;j++)
-            val[i][j] = ((QString) m_list2.at(j)).toInt();
+            val[i][j] = ((QString) m_list2.at(j)).toFloat();
     }
 
     this->createMatrice();
@@ -103,19 +103,19 @@ void Matrice::affichMatrice()
 
 void Matrice::methode1()
 {
-    QVector< QVector<int> > a = this->val;
+    QVector< QVector<float> > a = this->val;
     int etape;
     int pivot;
     int repere;
 
     m_result = new Resultat();
-    m_result->setWindowTitle("Résultat :Pivot de Gauss");
+    m_result->setWindowTitle("Résultat : Pivot de Gauss");
     m_result->show();
 
     for(etape = 0;etape<taille-1;etape++)
     {
         pivot = a[etape][etape];
-        m_result->ajouterResultat(a,"Etape " +QString::number(etape));
+        m_result->ResulatMethode1(a,"Etape " +QString::number(etape));
         for(int i = etape+1;i < taille;i++)
         {
             repere = a[i][etape];
@@ -124,7 +124,7 @@ void Matrice::methode1()
         }
     }
 
-    m_result->ajouterResultat(a,"Etape " +QString::number(etape));
+    m_result->ResulatMethode1(a,"Etape " +QString::number(etape));
     //La matrice est échelonnée ya pu qua trouver les valeurs ....
 
 
@@ -135,7 +135,37 @@ void Matrice::methode1()
 
 void Matrice::methode2()
 {
-    QMessageBox::information(this,"Methode 2","C'est la methode 2",QMessageBox::Close);
+    QVector< QVector<float> > a = this->val;
+    float repere;
+    QVector<float> inco(taille);
+    QVector<float> new_inco(taille);
+    for(int i = 0; i < taille; i++)
+        inco[i] = 1;
+
+    m_result = new Resultat();
+    m_result->setWindowTitle("Résultat : Jacobi");
+    m_result->show();
+
+    for(int i = 0; i < taille;i++)
+    {
+        repere = a[i][i];
+        for(int j = 0;j < taille+1;j++)
+            a[i][j] = a[i][j]/repere;
+    }
+
+
+    for(int etape = 0;etape<20;etape++)
+    {
+        for(int i = 0;i<taille;i++)
+        {
+            new_inco[i] = a[i][taille];
+            for(int j = 0;j<taille;j++)
+                new_inco[i] = new_inco[i] - a[i][j]*inco[j];
+            new_inco[i] += inco[i];
+        }
+        inco = new_inco;
+        m_result->ResulatMethode2(inco,"Etape "+QString::number(etape));
+    }
 }
 
 void Matrice::methode3()

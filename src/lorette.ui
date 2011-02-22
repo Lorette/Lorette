@@ -76,7 +76,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>527</width>
+         <width>507</width>
          <height>280</height>
         </rect>
        </property>
@@ -92,7 +92,7 @@
        <item>
         <widget class="QRadioButton" name="radioButton">
          <property name="text">
-          <string>Méthode 1</string>
+          <string>Pivot de Gauss</string>
          </property>
          <property name="checked">
           <bool>true</bool>
@@ -102,14 +102,14 @@
        <item>
         <widget class="QRadioButton" name="radioButton_2">
          <property name="text">
-          <string>Méthode 2</string>
+          <string>Jacobi</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QRadioButton" name="radioButton_3">
          <property name="text">
-          <string>Méthode 3</string>
+          <string>Gauss-Seidel</string>
          </property>
         </widget>
        </item>

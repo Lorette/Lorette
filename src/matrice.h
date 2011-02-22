@@ -28,7 +28,7 @@ public:
 private:
     QFile *m_file;
     int taille;
-    QVector< QVector<int> > val;
+    QVector< QVector<float> > val;
     QSpinBox *m_spin;
     Label *m_label_modifying;
     Label ***m_label;
