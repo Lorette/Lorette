@@ -104,6 +104,7 @@ void Matrice::affichMatrice()
 void Matrice::methode1()
 {
     QVector< QVector<float> > a = this->val;
+    QVector<float> result(taille);
     int etape;
     int pivot;
     int repere;
@@ -128,8 +129,19 @@ void Matrice::methode1()
     //La matrice est échelonnée ya pu qua trouver les valeurs ....
 
 
+    for(int i = taille-1;i >= 0;i--)
+    {
+        repere = a[i][i];
+        for(int j = 0;j< taille+1;j++)
+            a[i][j]/=repere;
 
+        result[i] = a[i][taille];
+        for(int j=0;j<taille;j++)
+            if(j!=i)
+                result[i] -= a[i][j]*result[j];
+    }
 
+    m_result->ResulatMethode2(result,"Final ");
 }
 
 
@@ -165,7 +177,8 @@ void Matrice::methode2()
         }
         inco = new_inco;
         m_result->ResulatMethode2(inco,"Etape "+QString::number(etape));
-    }
+
+    }  
 }
 
 void Matrice::methode3()
