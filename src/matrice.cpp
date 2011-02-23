@@ -145,8 +145,6 @@ void Matrice::methode2()
     float repere;
     QVector<float> inco(taille);
     QVector<float> new_inco(taille);
-    for(int i = 0; i < taille; i++)
-        inco[i] = 1;
 
     m_result = new Resultat();
     m_result->setWindowTitle("Résultat : Jacobi");
@@ -160,7 +158,7 @@ void Matrice::methode2()
     }
 
 
-    for(int etape = 0;etape<20;etape++)
+    for(int etape = 0;etape < 20;etape++)
     {
         for(int i = 0;i<taille;i++)
         {
@@ -177,7 +175,39 @@ void Matrice::methode2()
 
 void Matrice::methode3()
 {
-    QMessageBox::information(this,"Methode 3","C'est la methode 3",QMessageBox::Close);
+    QVector< QVector<float> > a = this->val;
+    float repere;
+    float _max = 1;
+    QVector<float> inco(taille);
+    QVector<float> new_inco(taille);
+
+    m_result = new Resultat();
+    m_result->setWindowTitle("Résultat : Jacobi");
+    m_result->show();
+
+    for(int i = 0; i < taille;i++)
+    {
+        repere = a[i][i];
+        for(int j = 0;j < taille+1;j++)
+            a[i][j] = a[i][j]/repere;
+    }
+
+    for(int etape = 0;_max > 0.00005 && etape < 100;etape++)
+    {
+        _max = 0;
+        for(int i = 0;i<taille;i++)
+        {
+            new_inco[i] = a[i][taille];
+            for(int j = 0;j<taille;j++)
+                if(j!=i)
+                    new_inco[i] = new_inco[i] - a[i][j]*new_inco[j];
+        }
+        for(int i = 0; i < taille;i++)
+            _max = (_max > ((new_inco[i]-inco[i])/new_inco[i])) ? _max : ((new_inco[i]-inco[i])/new_inco[i]);
+
+        inco = new_inco;
+        m_result->ResulatMethode2(new_inco,"Etape "+QString::number(etape));
+    }
 }
 
 void Matrice::setm_file(QString f)

@@ -12,7 +12,6 @@
 #include <QVector>
 #include <QLayout>
 #include <QLayoutItem>
-#include <math.h>
 #include "resultat.h"
 #include "label.h"
 
