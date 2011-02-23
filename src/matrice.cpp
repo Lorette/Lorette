@@ -59,13 +59,8 @@ void Matrice::createMatrice()
 
 Matrice::~Matrice()
 {
-    if(m_spin != NULL)
-    {
-        //delete m_spin;
-        //delete m_label_modifying;
-        delete m_file;
-    }
-
+    if(m_spin != NULL) delete m_spin;
+    if(m_file != NULL) delete m_file;
     for(int i = 0; i < taille; i++)
     {
         for(int j = 0; j < taille+1; j++)
@@ -126,7 +121,6 @@ void Matrice::methode1()
     }
 
     m_result->ResulatMethode1(a,"Etape " +QString::number(etape));
-    //La matrice est échelonnée ya pu qua trouver les valeurs ....
 
 
     for(int i = taille-1;i >= 0;i--)
