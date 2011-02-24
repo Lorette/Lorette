@@ -50,6 +50,9 @@ Matrice::Matrice(QWidget *parent,QString f) : QWidget(parent)
 
 void Matrice::createMatrice()
 {
+    m_label.resize(taille);
+    for(int i = 0;i < taille;i++)
+        m_label[i].resize(taille+1);
     m_result = NULL;
     setMinimumSize(42*taille,21*taille);
     m_spin = NULL;
@@ -65,7 +68,6 @@ Matrice::~Matrice()
     {
         for(int j = 0; j < taille+1; j++)
                 delete m_label[i][j];
-        delete [] m_label[i];
     }
 
 }
@@ -78,10 +80,6 @@ QFile* Matrice::getm_file()
 
 void Matrice::affichMatrice()
 {
-    m_label = new Label** [taille];
-    for (int i = 0; i < taille; i++)
-        m_label[i] = new Label* [taille+1];
-
     for(int i = 0;i < taille;i++)
     {
         for(int j = 0;j < taille+1;j++)
@@ -95,7 +93,7 @@ void Matrice::affichMatrice()
         emit(progress_value_changed((int)(((float)i/(float)taille)*100)));
     }
 
-
+        emit(progress_value_changed(0));
 }
 
 void Matrice::methode1()
@@ -108,7 +106,6 @@ void Matrice::methode1()
 
     m_result = new Resultat();
     m_result->setWindowTitle("Résultat : Pivot de Gauss");
-    m_result->show();
 
     for(etape = 0;etape<taille-1;etape++)
     {
@@ -119,7 +116,9 @@ void Matrice::methode1()
             repere = a[i][etape];
             for(int j = etape; j < taille+1;j++)
                 a[i][j] = pivot*a[i][j] - repere*a[etape][j];
+
         }
+        emit(progress_value_changed((int)(((float)etape/(float)taille)*100)));
     }
 
     m_result->ResulatMethode1(a,"Etape " +QString::number(etape));
@@ -135,9 +134,15 @@ void Matrice::methode1()
         for(int j=0;j<taille;j++)
             if(j!=i)
                 result[i] -= a[i][j]*result[j];
+
+        emit(progress_value_changed((int)(((float)i/(float)taille)*100)));
     }
 
     m_result->ResulatMethode2(result,"Final ");
+
+    m_result->show();
+
+    emit(progress_value_changed(0));
 }
 
 
@@ -150,7 +155,6 @@ void Matrice::methode2()
 
     m_result = new Resultat();
     m_result->setWindowTitle("Résultat : Jacobi");
-    m_result->show();
 
     for(int i = 0; i < taille;i++)
     {
@@ -173,6 +177,7 @@ void Matrice::methode2()
         m_result->ResulatMethode2(inco,"Etape "+QString::number(etape));
 
     }  
+    m_result->show();
 }
 
 void Matrice::methode3()
@@ -184,8 +189,7 @@ void Matrice::methode3()
     QVector<float> new_inco(taille);
 
     m_result = new Resultat();
-    m_result->setWindowTitle("Résultat : Jacobi");
-    m_result->show();
+    m_result->setWindowTitle("Résultat : Gauss-Seidel");
 
     for(int i = 0; i < taille;i++)
     {
@@ -210,6 +214,8 @@ void Matrice::methode3()
         inco = new_inco;
         m_result->ResulatMethode2(new_inco,"Etape "+QString::number(etape));
     }
+
+    m_result->show();
 }
 
 void Matrice::setm_file(QString f)
@@ -266,28 +272,63 @@ void Matrice::on_click()
     m_spin = NULL;
 }
 
-void Matrice::modify_taille(int t)
+void Matrice::add_line()
 {
-    if(taille == 1 && t == -1)
-        return;
-
-    for(int i = 0; i < taille; i++)
-    {
-        for(int j = 0; j < taille+1; j++)
-            delete m_label[i][j];
-        delete [] m_label[i];
-    }
-
-    delete [] m_label;
-
-    taille=taille+t;
+    taille++;
+    m_label.resize(taille);
     val.resize(taille);
     for(int i = 0;i < taille;i++)
+    {
         val[i].resize(taille+1);
+        m_label[i].resize(taille+1);
+    }
+
+    for(int i = 0 ; i < taille;i++)
+    {
+        m_label[taille-1][i] = new Label(this,taille-1,i);
+        m_label[i][taille] = new Label(this,i,taille);
+        m_label[taille-1][i]->setText(QString::number(val[taille-1][i]));
+        m_label[i][taille]->setText(QString::number(val[i][taille]));
+        connect(m_label[taille-1][i],SIGNAL(clicked(Label*)),this,SLOT(on_label_click(Label*)));
+        connect(m_label[i][taille],SIGNAL(clicked(Label*)),this,SLOT(on_label_click(Label*)));
+        m_label[taille-1][i]->setGeometry(QRect(40*i+52,20*(taille-1)+10,40,20));
+        m_label[i][taille]->setGeometry(QRect(40*taille+52,20*i+10,40,20));
+        m_label[taille-1][i]->show();
+        m_label[i][taille]->show();
+
+        emit(progress_value_changed((int)(((float)i/(float)taille)*100)));
+
+    }
+
+    emit(progress_value_changed(0));
+    setMinimumSize(42*taille,21*taille);
+}
+
+void Matrice::del_line()
+{
+    if(taille == 1)
+        return;
+
+
+    taille--;
+
+    for(int i = 0 ; i < taille+1;i++)
+    {
+        delete m_label[taille][i];
+        delete m_label[i][taille+1];
+    }
     setMinimumSize(42*taille,21*taille);
 
+    m_label.resize(taille);
+    val.resize(taille);
+    for(int i = 0;i < taille;i++)
+    {
+        val[i].resize(taille+1);
+        m_label[i].resize(taille+1);
+        emit(progress_value_changed((int)(((float)i/(float)taille)*100)));
+    }
 
-    this->affichMatrice();
+    emit(progress_value_changed(0));
 }
 
 void Matrice::genMatrice()
@@ -297,16 +338,18 @@ void Matrice::genMatrice()
     {
         for(int j = 0; j < taille+1; j++)
             delete m_label[i][j];
-        delete [] m_label[i];
     }
 
-    delete [] m_label;
 
-    taille = QInputDialog::getInt(0,"Ma bite","En sauce",1,1,999);
+    taille = QInputDialog::getInt(0,"Ma bite","En sauce",1,1,1000000);
+
     val.resize(taille);
+    m_label.resize(taille);
     for(int i = 0;i<taille;i++)
+    {
         val[i].resize(taille+1);
-
+        m_label[i].resize(taille+1);
+    }
     for(int i=0;i<taille;i++)
     {
         for(int j=0;j<taille+1;j++)

@@ -150,9 +150,9 @@ void Lorette::createForm()
     saveAsAct->setShortcuts(QKeySequence::SaveAs);
     connect(saveAsAct, SIGNAL(triggered()), this, SLOT(actionEnregistrer_Sous_triggered()));
 
-    exitAct = new QAction(QIcon(":/images/exit.png"),tr("Quitter"), this);
+    exitAct = new QAction(QIcon(":/images/exit.png"),tr("Fermer"), this);
     exitAct->setShortcuts(QKeySequence::Quit);
-    connect(exitAct, SIGNAL(triggered()), this, SLOT(actionQuitter_triggered()));
+    connect(exitAct, SIGNAL(triggered()), this, SLOT(delete_matrice()));
 
     genAct = new QAction(QIcon(":/images/new.png"), tr("Générer"), this);
     connect(genAct, SIGNAL(triggered()), this, SLOT(actionGen_Matrice()));
@@ -197,13 +197,13 @@ void Lorette::pushButton_clicked()
     if(mat == NULL)
         actionNouvelle_Matrice_triggered();
 
-    mat->modify_taille(1);
+    mat->add_line();
 }
 
 void Lorette::pushButton_2_clicked()
 {
     if(mat != NULL)
-        mat->modify_taille(-1);
+        mat->del_line();
 }
 
 void Lorette::actionGen_Matrice()
@@ -219,4 +219,15 @@ void Lorette::actionGen_Matrice()
 void Lorette::progress_value_changed(int value)
 {
     m_progress->setValue(value);
+}
+
+void Lorette::delete_matrice()
+{
+    if(mat != NULL)
+        delete mat;
+
+    mat = NULL;
+
+    this->setWindowTitle(name);
+    ui->scrollArea->setWidget(new QWidget());
 }

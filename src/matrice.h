@@ -32,7 +32,7 @@ private:
     QVector< QVector<float> > val;
     QSpinBox *m_spin;
     Label *m_label_modifying;
-    Label ***m_label;
+    QVector< QVector<Label*> > m_label;
     Resultat *m_result;
 
 public:
@@ -44,7 +44,8 @@ public:
     void methode3();
     void save();
     void createMatrice();
-    void modify_taille(int t);
+    void add_line();
+    void del_line();
     void genMatrice();
 
 private slots:

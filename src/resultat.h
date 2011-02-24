@@ -6,6 +6,7 @@
 #include <QScrollArea>
 #include <QLabel>
 #include <QPushButton>
+#include <QMessageBox>
 
 namespace Ui {
     class Resultat;

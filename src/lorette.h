@@ -49,6 +49,7 @@ private slots:
     void pushButton_clicked();
     void actionGen_Matrice();
     void progress_value_changed(int value);
+    void delete_matrice();
 };
 
 #endif // LORETTE_H
