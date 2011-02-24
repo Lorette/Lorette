@@ -25,32 +25,6 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
-        <widget class="QPushButton" name="pushButton">
-         <property name="maximumSize">
-          <size>
-           <width>20</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>+</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QPushButton" name="pushButton_2">
-         <property name="maximumSize">
-          <size>
-           <width>20</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>-</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -76,8 +50,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>507</width>
-         <height>280</height>
+         <width>487</width>
+         <height>303</height>
         </rect>
        </property>
       </widget>
@@ -141,82 +115,11 @@
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>693</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuFichier">
-    <property name="title">
-     <string>Fichier</string>
-    </property>
-    <addaction name="actionNouvelle_Matrice"/>
-    <addaction name="actionOuvrir_Matrice"/>
-    <addaction name="actionEnregistrer"/>
-    <addaction name="actionEnregistrer_Sous"/>
-    <addaction name="separator"/>
-    <addaction name="actionQuitter"/>
-   </widget>
-   <addaction name="menuFichier"/>
-  </widget>
   <widget class="QStatusBar" name="statusBar">
    <property name="cursor">
     <cursorShape>ArrowCursor</cursorShape>
    </property>
   </widget>
-  <action name="actionNouvelle_Matrice">
-   <property name="text">
-    <string>Nouvelle Matrice</string>
-   </property>
-   <property name="statusTip">
-    <string>Creer Une Nouvelle Matrice</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+N</string>
-   </property>
-  </action>
-  <action name="actionOuvrir_Matrice">
-   <property name="text">
-    <string>Ouvrir Matrice</string>
-   </property>
-   <property name="statusTip">
-    <string>Ouvrir Une Matrice Existante</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+O</string>
-   </property>
-  </action>
-  <action name="actionQuitter">
-   <property name="text">
-    <string>Quitter</string>
-   </property>
-   <property name="statusTip">
-    <string>Fermer le Programme</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Q</string>
-   </property>
-  </action>
-  <action name="actionEnregistrer">
-   <property name="text">
-    <string>Enregistrer</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+S</string>
-   </property>
-  </action>
-  <action name="actionEnregistrer_Sous">
-   <property name="text">
-    <string>Enregistrer sous...</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Shift+S</string>
-   </property>
-  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

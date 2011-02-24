@@ -6,13 +6,14 @@ Lorette::Lorette(QWidget *parent) : QMainWindow(parent),ui(new Ui::Lorette)
 {
     ui->setupUi(this);
     name = this->windowTitle();
+    createForm();
     m_button_exec = new QPushButton("Executer",ui->buttonBox);
     m_button_quit = new QPushButton("Quitter",ui->buttonBox);
     ui->buttonBox->addButton(m_button_exec,QDialogButtonBox::NoRole);
     ui->buttonBox->addButton(m_button_quit,QDialogButtonBox::NoRole);
 
-    connect(m_button_exec,SIGNAL(clicked()),this,SLOT(on_clickm_button_exec()));
-    connect(m_button_quit,SIGNAL(clicked()),this,SLOT(on_actionQuitter_triggered()));
+    connect(m_button_exec,SIGNAL(clicked()),this,SLOT(clickm_button_exec()));
+    connect(m_button_quit,SIGNAL(clicked()),this,SLOT(actionQuitter_triggered()));
 
     mat = NULL;
     methode = 1;
@@ -29,19 +30,18 @@ Lorette::~Lorette()
 }
 
 
-void Lorette::on_actionQuitter_triggered()
+void Lorette::actionQuitter_triggered()
 {
     QApplication::quit();
 }
 
-void Lorette::on_clickm_button_exec()
+void Lorette::clickm_button_exec()
 {
     if(mat == NULL)
     {
         QMessageBox::information(this,"Mais arrete ....","Eh ! Y'a pas de matrice charger",QMessageBox::Close);
         return;
     }
-
 
     switch(methode)
     {
@@ -54,23 +54,7 @@ void Lorette::on_clickm_button_exec()
     }
 }
 
-
-void Lorette::on_radioButton_clicked()
-{
-    methode = 1;
-}
-
-void Lorette::on_radioButton_2_clicked()
-{
-    methode = 2;
-}
-
-void Lorette::on_radioButton_3_clicked()
-{
-    methode = 3;
-}
-
-void Lorette::on_actionEnregistrer_triggered()
+void Lorette::actionEnregistrer_triggered()
 {
     if(mat == NULL)
     {
@@ -79,13 +63,13 @@ void Lorette::on_actionEnregistrer_triggered()
     }
 
     if(mat->getm_file() == NULL)
-        on_actionEnregistrer_Sous_triggered();
+        actionEnregistrer_Sous_triggered();
     else
         mat->save();
 
 }
 
-void Lorette::on_actionEnregistrer_Sous_triggered()
+void Lorette::actionEnregistrer_Sous_triggered()
 {
     if(mat == NULL)
         return;
@@ -100,7 +84,7 @@ void Lorette::on_actionEnregistrer_Sous_triggered()
 
 }
 
-void Lorette::on_actionOuvrir_Matrice_triggered()
+void Lorette::actionOuvrir_Matrice_triggered()
 {
 
     QString file = QFileDialog::getOpenFileName();
@@ -115,25 +99,93 @@ void Lorette::on_actionOuvrir_Matrice_triggered()
     }
 }
 
-void Lorette::on_pushButton_clicked()
+void Lorette::pushButton_clicked()
 {
     if(mat == NULL)
-        on_actionNouvelle_Matrice_triggered();
+        actionNouvelle_Matrice_triggered();
 
     mat->modify_taille(1);
 }
 
-void Lorette::on_pushButton_2_clicked()
+void Lorette::pushButton_clicked_2()
 {
     if(mat != NULL)
         mat->modify_taille(-1);
 }
 
 
-void Lorette::on_actionNouvelle_Matrice_triggered()
+void Lorette::actionNouvelle_Matrice_triggered()
 {
     mat = new Matrice(ui->scrollArea);
     ui->scrollArea->setWidget(mat);
     this->setWindowTitle(name +" - Nouvelle Matrice");
     mat->show();
+}
+
+
+void Lorette::createForm()
+{
+    QAction *newAct,*openAct,*saveAct,*saveAsAct,*exitAct,*addAct,*delAct;
+    QToolBar *fileToolBar;
+
+    fileToolBar = addToolBar(tr("File"));
+
+
+
+    newAct = new QAction(QIcon(":/images/new.png"), tr("Nouveau"), this);
+    newAct->setShortcuts(QKeySequence::New);
+    newAct->setStatusTip(tr("Creer une nouvelle matrice"));
+    connect(newAct, SIGNAL(triggered()), this, SLOT(actionNouvelle_Matrice_triggered()));
+
+    openAct = new QAction(QIcon(":/images/open.png"), tr("Ouvrir"), this);
+    openAct->setShortcuts(QKeySequence::Open);
+    openAct->setStatusTip(tr("Ouvrir un fichier .lor"));
+    connect(openAct, SIGNAL(triggered()), this, SLOT(actionOuvrir_Matrice_triggered()));
+
+    saveAct = new QAction(QIcon(":/images/save.png"), tr("Sauvegarder"), this);
+    saveAct->setShortcuts(QKeySequence::Save);
+    saveAct->setStatusTip(tr("Sauvegarder la matrice"));
+    connect(saveAct, SIGNAL(triggered()), this, SLOT(actionEnregistrer_triggered()));
+
+    saveAsAct = new QAction(QIcon(":/images/save-as.png"), tr("Sauvegarder Sous ..."), this);
+    saveAsAct->setShortcuts(QKeySequence::SaveAs);
+    saveAsAct->setStatusTip(tr("Sauvegarder la matrice sous ..."));
+    connect(saveAsAct, SIGNAL(triggered()), this, SLOT(actionEnregistrer_Sous_triggered()));
+
+    exitAct = new QAction(QIcon(":/images/exit.png"),tr("Quitter"), this);
+    exitAct->setShortcuts(QKeySequence::Quit);
+    exitAct->setStatusTip(tr("Quitter Lorette"));
+    connect(exitAct, SIGNAL(triggered()), this, SLOT(actionQuitter_triggered()));
+
+    fileToolBar->addAction(newAct);
+    fileToolBar->addAction(openAct);
+    fileToolBar->addAction(saveAct);
+    fileToolBar->addAction(saveAsAct);
+    fileToolBar->addAction(exitAct);
+
+    addAct = new QAction(QIcon(":/images/add.png"), tr("Ajouter"), this);
+    addAct->setStatusTip(tr("Ajouter une ligne"));
+    connect(addAct, SIGNAL(triggered()), this, SLOT(pushButton_clicked()));
+
+    delAct = new QAction(QIcon(":/images/del.png"), tr("Supprimer"), this);
+    delAct->setStatusTip(tr("Supprimer une ligne"));
+    connect(delAct, SIGNAL(triggered()), this, SLOT(pushButton_clicked_2()));
+
+    ui->groupBox_2->addAction(addAct);
+    ui->groupBox_2->addAction(delAct);
+}
+
+void Lorette::on_radioButton_3_clicked()
+{
+    methode = 3;
+}
+
+void Lorette::on_radioButton_2_clicked()
+{
+    methode = 2;
+}
+
+void Lorette::on_radioButton_clicked()
+{
+       methode = 1;
 }

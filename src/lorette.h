@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QFile>
 #include <QFileDialog>
+#include <QToolBar>
 #include "matrice.h"
 
 namespace Ui {
@@ -19,6 +20,7 @@ class Lorette : public QMainWindow
 public:
     explicit Lorette(QWidget *parent = 0);
     ~Lorette();
+    void createForm();
 
 
 private:
@@ -31,17 +33,19 @@ private:
 
 
 private slots:
-    void on_pushButton_clicked();
-    void on_pushButton_2_clicked();
-    void on_actionOuvrir_Matrice_triggered();
-    void on_actionEnregistrer_Sous_triggered();
-    void on_actionEnregistrer_triggered();
+    void pushButton_clicked();
+    void pushButton_clicked_2();
+    void actionOuvrir_Matrice_triggered();
+    void actionEnregistrer_Sous_triggered();
+    void actionEnregistrer_triggered();
+    void actionQuitter_triggered();
+    void clickm_button_exec();
+    void actionNouvelle_Matrice_triggered();
     void on_radioButton_clicked();
-    void on_radioButton_3_clicked();
     void on_radioButton_2_clicked();
-    void on_actionQuitter_triggered();
-    void on_clickm_button_exec();
-    void on_actionNouvelle_Matrice_triggered();
+    void on_radioButton_3_clicked();
+
+
 };
 
 #endif // LORETTE_H
