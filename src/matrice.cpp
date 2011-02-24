@@ -341,7 +341,7 @@ void Matrice::genMatrice()
     }
 
 
-    taille = QInputDialog::getInt(0,"Ma bite","En sauce",1,1,1000000);
+    taille = QInputDialog::getInt(0,"Taille","Entrez la taille de votre matrice",1,1,1000000);
 
     val.resize(taille);
     m_label.resize(taille);

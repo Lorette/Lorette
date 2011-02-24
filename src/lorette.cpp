@@ -13,7 +13,7 @@ Lorette::Lorette(QWidget *parent) : QMainWindow(parent),ui(new Ui::Lorette)
     ui->buttonBox->addButton(m_button_quit,QDialogButtonBox::NoRole);
 
     connect(m_button_exec,SIGNAL(clicked()),this,SLOT(clickm_button_exec()));
-    connect(m_button_quit,SIGNAL(clicked()),this,SLOT(actionQuitter_triggered()));
+    connect(m_button_quit,SIGNAL(clicked()),this,SLOT(close()));
 
     mat = NULL;
     methode = 1;
@@ -230,4 +230,10 @@ void Lorette::delete_matrice()
 
     this->setWindowTitle(name);
     ui->scrollArea->setWidget(new QWidget());
+}
+
+void Lorette::closeEvent(QCloseEvent *event)
+{
+    QMessageBox::information(0,"TODO","...");
+    event->ignore();
 }

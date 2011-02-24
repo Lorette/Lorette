@@ -23,6 +23,8 @@ public:
     ~Lorette();
     void createForm();
 
+protected:
+    void closeEvent(QCloseEvent *event);
 
 private:
     Matrice *mat;
