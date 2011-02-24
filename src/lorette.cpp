@@ -28,13 +28,6 @@ Lorette::~Lorette()
     delete m_button_quit;
 }
 
-void Lorette::on_actionNouvelle_Matrice_activated()
-{
-    mat = new Matrice(ui->scrollArea);
-    ui->scrollArea->setWidget(mat);
-    this->setWindowTitle(name +" - Nouvelle Matrice");
-    mat->show();
-}
 
 void Lorette::on_actionQuitter_triggered()
 {
@@ -125,7 +118,7 @@ void Lorette::on_actionOuvrir_Matrice_triggered()
 void Lorette::on_pushButton_clicked()
 {
     if(mat == NULL)
-        on_actionNouvelle_Matrice_activated();
+        on_actionNouvelle_Matrice_triggered();
 
     mat->modify_taille(1);
 }
@@ -136,3 +129,11 @@ void Lorette::on_pushButton_2_clicked()
         mat->modify_taille(-1);
 }
 
+
+void Lorette::on_actionNouvelle_Matrice_triggered()
+{
+    mat = new Matrice(ui->scrollArea);
+    ui->scrollArea->setWidget(mat);
+    this->setWindowTitle(name +" - Nouvelle Matrice");
+    mat->show();
+}

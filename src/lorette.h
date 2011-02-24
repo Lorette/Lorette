@@ -40,8 +40,8 @@ private slots:
     void on_radioButton_3_clicked();
     void on_radioButton_2_clicked();
     void on_actionQuitter_triggered();
-    void on_actionNouvelle_Matrice_activated();
     void on_clickm_button_exec();
+    void on_actionNouvelle_Matrice_triggered();
 };
 
 #endif // LORETTE_H
