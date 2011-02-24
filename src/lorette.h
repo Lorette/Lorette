@@ -24,17 +24,18 @@ public:
 
 
 private:
-    QPushButton *m_button_exec;
-    QPushButton *m_button_quit;
     Matrice *mat;
     Ui::Lorette *ui;
     int methode;
     QString name;
+    QPushButton *m_button_exec,*m_button_quit;
+    QAction *newAct,*openAct,*saveAct,*saveAsAct,*exitAct,*addAct,*delAct;
+    QToolBar *fileToolBar,*toolBar;
 
 
 private slots:
-    void pushButton_clicked();
-    void pushButton_clicked_2();
+    void on_pushButton_clicked();
+    void on_pushButton_2_clicked();
     void actionOuvrir_Matrice_triggered();
     void actionEnregistrer_Sous_triggered();
     void actionEnregistrer_triggered();

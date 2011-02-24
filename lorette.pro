@@ -18,4 +18,5 @@ SOURCES += src/label.cpp \
            src/resultat.cpp
 
 RESOURCES += \
+    lorette.qrc \
     lorette.qrc

@@ -27,6 +27,15 @@ Lorette::~Lorette()
 
     delete m_button_exec;
     delete m_button_quit;
+    delete newAct;
+    delete openAct;
+    delete saveAct;
+    delete saveAsAct;
+    delete exitAct;
+    delete addAct;
+    delete delAct;
+    delete fileToolBar;
+    delete toolBar;
 }
 
 
@@ -99,19 +108,6 @@ void Lorette::actionOuvrir_Matrice_triggered()
     }
 }
 
-void Lorette::pushButton_clicked()
-{
-    if(mat == NULL)
-        actionNouvelle_Matrice_triggered();
-
-    mat->modify_taille(1);
-}
-
-void Lorette::pushButton_clicked_2()
-{
-    if(mat != NULL)
-        mat->modify_taille(-1);
-}
 
 
 void Lorette::actionNouvelle_Matrice_triggered()
@@ -125,10 +121,10 @@ void Lorette::actionNouvelle_Matrice_triggered()
 
 void Lorette::createForm()
 {
-    QAction *newAct,*openAct,*saveAct,*saveAsAct,*exitAct,*addAct,*delAct;
-    QToolBar *fileToolBar;
-
+    toolBar = new QToolBar(tr("Outils"),this);
     fileToolBar = addToolBar(tr("File"));
+    this->addToolBar(Qt::LeftToolBarArea,toolBar);
+
 
 
 
@@ -157,22 +153,22 @@ void Lorette::createForm()
     exitAct->setStatusTip(tr("Quitter Lorette"));
     connect(exitAct, SIGNAL(triggered()), this, SLOT(actionQuitter_triggered()));
 
+    addAct = new QAction(QIcon(":/images/add.png"), tr("Ajouter"), this);
+    addAct->setStatusTip(tr("Ajouter une ligne"));
+    connect(addAct, SIGNAL(triggered()), this, SLOT(on_pushButton_clicked()));
+
+    delAct = new QAction(QIcon(":/images/del.png"), tr("Supprimer"), this);
+    delAct->setStatusTip(tr("Supprimer une ligne"));
+    connect(delAct, SIGNAL(triggered()), this, SLOT(on_pushButton_2_clicked()));
+
     fileToolBar->addAction(newAct);
     fileToolBar->addAction(openAct);
     fileToolBar->addAction(saveAct);
     fileToolBar->addAction(saveAsAct);
     fileToolBar->addAction(exitAct);
 
-    addAct = new QAction(QIcon(":/images/add.png"), tr("Ajouter"), this);
-    addAct->setStatusTip(tr("Ajouter une ligne"));
-    connect(addAct, SIGNAL(triggered()), this, SLOT(pushButton_clicked()));
-
-    delAct = new QAction(QIcon(":/images/del.png"), tr("Supprimer"), this);
-    delAct->setStatusTip(tr("Supprimer une ligne"));
-    connect(delAct, SIGNAL(triggered()), this, SLOT(pushButton_clicked_2()));
-
-    ui->groupBox_2->addAction(addAct);
-    ui->groupBox_2->addAction(delAct);
+    toolBar->addAction(addAct);
+    toolBar->addAction(delAct);
 }
 
 void Lorette::on_radioButton_3_clicked()
@@ -188,4 +184,18 @@ void Lorette::on_radioButton_2_clicked()
 void Lorette::on_radioButton_clicked()
 {
        methode = 1;
+}
+
+void Lorette::on_pushButton_clicked()
+{
+    if(mat == NULL)
+        actionNouvelle_Matrice_triggered();
+
+    mat->modify_taille(1);
+}
+
+void Lorette::on_pushButton_2_clicked()
+{
+    if(mat != NULL)
+        mat->modify_taille(-1);
 }
