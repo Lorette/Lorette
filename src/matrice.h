@@ -12,6 +12,8 @@
 #include <QVector>
 #include <QLayout>
 #include <QLayoutItem>
+#include <QInputDialog>
+#include <QProgressBar>
 #include "resultat.h"
 #include "label.h"
 
@@ -43,6 +45,7 @@ public:
     void save();
     void createMatrice();
     void modify_taille(int t);
+    void genMatrice();
 
 private slots:
     void on_click();
@@ -57,6 +60,7 @@ private slots:
 
     signals:
         void clicked();
+        void progress_value_changed(int);
 
 };
 

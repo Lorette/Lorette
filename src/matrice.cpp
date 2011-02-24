@@ -92,8 +92,10 @@ void Matrice::affichMatrice()
             m_label[i][j]->setGeometry(QRect(40*j+52,20*i+10,40,20));
             m_label[i][j]->show();
         }
-
+        emit(progress_value_changed((int)(((float)i/(float)taille)*100)));
     }
+
+
 }
 
 void Matrice::methode1()
@@ -285,5 +287,33 @@ void Matrice::modify_taille(int t)
     setMinimumSize(42*taille,21*taille);
 
 
+    this->affichMatrice();
+}
+
+void Matrice::genMatrice()
+{
+
+    for(int i = 0; i < taille; i++)
+    {
+        for(int j = 0; j < taille+1; j++)
+            delete m_label[i][j];
+        delete [] m_label[i];
+    }
+
+    delete [] m_label;
+
+    taille = QInputDialog::getInt(0,"Ma bite","En sauce",1,1,999);
+    val.resize(taille);
+    for(int i = 0;i<taille;i++)
+        val[i].resize(taille+1);
+
+    for(int i=0;i<taille;i++)
+    {
+        for(int j=0;j<taille+1;j++)
+        {
+            val[i][j] = qrand()%20;
+        }
+    }
+    setMinimumSize(42*taille,21*taille);
     this->affichMatrice();
 }

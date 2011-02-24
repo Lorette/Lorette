@@ -7,6 +7,7 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QToolBar>
+#include <QProgressBar>
 #include "matrice.h"
 
 namespace Ui {
@@ -29,13 +30,12 @@ private:
     int methode;
     QString name;
     QPushButton *m_button_exec,*m_button_quit;
-    QAction *newAct,*openAct,*saveAct,*saveAsAct,*exitAct,*addAct,*delAct;
+    QAction *newAct,*openAct,*saveAct,*saveAsAct,*exitAct,*addAct,*delAct,*genAct;
     QToolBar *fileToolBar,*toolBar;
+    QProgressBar *m_progress;
 
 
 private slots:
-    void on_pushButton_clicked();
-    void on_pushButton_2_clicked();
     void actionOuvrir_Matrice_triggered();
     void actionEnregistrer_Sous_triggered();
     void actionEnregistrer_triggered();
@@ -45,8 +45,10 @@ private slots:
     void on_radioButton_clicked();
     void on_radioButton_2_clicked();
     void on_radioButton_3_clicked();
-
-
+    void pushButton_2_clicked();
+    void pushButton_clicked();
+    void actionGen_Matrice();
+    void progress_value_changed(int value);
 };
 
 #endif // LORETTE_H
