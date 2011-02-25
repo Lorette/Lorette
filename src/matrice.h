@@ -46,7 +46,7 @@ public:
     void createMatrice();
     void add_line();
     void del_line();
-    void genMatrice();
+    void genMatrice(bool aleatoire);
 
 private slots:
     void on_click();

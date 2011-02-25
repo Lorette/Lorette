@@ -97,12 +97,12 @@ void Lorette::actionEnregistrer_Sous_triggered()
 
 void Lorette::actionOuvrir_Matrice_triggered()
 {
-
     QString file = QFileDialog::getOpenFileName();
     if(file != "")
     {
         if(mat != NULL)
-            mat->~Matrice();
+            delete mat;
+
         mat = new Matrice(ui->scrollArea,file);
         connect(mat,SIGNAL(progress_value_changed(int)),this,SLOT(progress_value_changed(int)));
         ui->scrollArea->setWidget(mat);
@@ -115,6 +115,9 @@ void Lorette::actionOuvrir_Matrice_triggered()
 
 void Lorette::actionNouvelle_Matrice_triggered()
 {
+    if(mat != NULL)
+        delete mat;
+
     mat = new Matrice(ui->scrollArea);
     connect(mat,SIGNAL(progress_value_changed(int)),this,SLOT(progress_value_changed(int)));
     ui->scrollArea->setWidget(mat);
@@ -154,8 +157,11 @@ void Lorette::createForm()
     exitAct->setShortcuts(QKeySequence::Quit);
     connect(exitAct, SIGNAL(triggered()), this, SLOT(delete_matrice()));
 
-    genAct = new QAction(QIcon(":/images/new.png"), tr("Générer"), this);
+    genAct = new QAction(QIcon(":/images/gen.png"), tr("Générer"), this);
     connect(genAct, SIGNAL(triggered()), this, SLOT(actionGen_Matrice()));
+
+    genAAct = new QAction(QIcon(":/images/gen.png"), tr("Générer Aléatoirement"), this);
+    connect(genAAct, SIGNAL(triggered()), this, SLOT(actionGen_Matrice_aleatoire()));
 
     addAct = new QAction(QIcon(":/images/add.png"), tr("Ajouter"), this);
     connect(addAct, SIGNAL(triggered()), this, SLOT(pushButton_clicked()));
@@ -169,11 +175,12 @@ void Lorette::createForm()
     fileToolBar->addAction(saveAsAct);
     fileToolBar->addAction(exitAct);
     fileToolBar->addSeparator();
-    fileToolBar->addAction(genAct);
-    fileToolBar->addSeparator();
     fileToolBar->addWidget(m_progress);
     toolBar->addAction(addAct);
     toolBar->addAction(delAct);
+    toolBar->addSeparator();
+    toolBar->addAction(genAct);
+    toolBar->addAction(genAAct);
     m_progress->show();
 }
 
@@ -206,13 +213,29 @@ void Lorette::pushButton_2_clicked()
         mat->del_line();
 }
 
-void Lorette::actionGen_Matrice()
+void Lorette::actionGen_Matrice_aleatoire()
 {
+    if(mat != NULL)
+        delete mat;
+
     mat = new Matrice(ui->scrollArea);
     connect(mat,SIGNAL(progress_value_changed(int)),this,SLOT(progress_value_changed(int)));
     ui->scrollArea->setWidget(mat);
     setWindowTitle(name +" - Matrice Générée");
-    mat->genMatrice();
+    mat->genMatrice(true);
+    mat->show();
+}
+
+void Lorette::actionGen_Matrice()
+{
+    if(mat != NULL)
+        delete mat;
+
+    mat = new Matrice(ui->scrollArea);
+    connect(mat,SIGNAL(progress_value_changed(int)),this,SLOT(progress_value_changed(int)));
+    ui->scrollArea->setWidget(mat);
+    setWindowTitle(name +" - Nouvelle Matrice");
+    mat->genMatrice(false);
     mat->show();
 }
 
@@ -235,5 +258,4 @@ void Lorette::delete_matrice()
 void Lorette::closeEvent(QCloseEvent *event)
 {
     QMessageBox::information(0,"TODO","...");
-    event->ignore();
 }

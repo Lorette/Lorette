@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QMessageBox>
+#include <QList>
 
 namespace Ui {
     class Resultat;
@@ -24,9 +25,13 @@ public:
     void ResulatMethode2(QVector<float> inco,QString name);
     QWidget* WidgetMethode2(QVector<float> inco,QWidget *parent);
 
+protected:
+    void closeEvent(QCloseEvent *event);
+
 private:
     Ui::Resultat *ui;
     QPushButton *m_button_quit;
+    QList<QLabel*> m_list;
 
 };
 

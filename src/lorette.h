@@ -32,7 +32,7 @@ private:
     int methode;
     QString name;
     QPushButton *m_button_exec,*m_button_quit;
-    QAction *newAct,*openAct,*saveAct,*saveAsAct,*exitAct,*addAct,*delAct,*genAct;
+    QAction *newAct,*openAct,*saveAct,*saveAsAct,*exitAct,*addAct,*delAct,*genAAct,*genAct;
     QToolBar *fileToolBar,*toolBar;
     QProgressBar *m_progress;
 
@@ -50,6 +50,7 @@ private slots:
     void pushButton_2_clicked();
     void pushButton_clicked();
     void actionGen_Matrice();
+    void actionGen_Matrice_aleatoire();
     void progress_value_changed(int value);
     void delete_matrice();
 };

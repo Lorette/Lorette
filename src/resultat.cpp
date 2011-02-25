@@ -14,6 +14,7 @@ Resultat::~Resultat()
 {
     delete m_button_quit;
     delete ui;
+    m_list.clear();
 }
 
 void Resultat::ResulatMethode1(QVector< QVector<float> > mat,QString name)
@@ -45,6 +46,7 @@ QWidget* Resultat::WidgetMethode1(QVector<QVector<float> > mat,QWidget *parent)
             m_label->setText(QString::number(mat[i][j]));
             m_label->setGeometry(QRect(40*j+52,20*i+10,40,20));
             m_label->show();
+            m_list << m_label;
         }
 
     }
@@ -79,7 +81,13 @@ QWidget* Resultat::WidgetMethode2(QVector<float> inco,QWidget *parent)
         m_label->setText("Inconnue n° "+QString::number(i+1) +" = " +QString::number(inco[i]));
         m_label->setGeometry(QRect(52,20*i+10,200,20));
         m_label->show();
+        m_list << m_label;
     }
     widget->show();
     return widget;
+}
+
+void Resultat::closeEvent(QCloseEvent *event)
+{
+    this->deleteLater();
 }

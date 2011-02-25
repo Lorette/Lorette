@@ -331,7 +331,7 @@ void Matrice::del_line()
     emit(progress_value_changed(0));
 }
 
-void Matrice::genMatrice()
+void Matrice::genMatrice(bool aleatoire)
 {
 
     for(int i = 0; i < taille; i++)
@@ -354,7 +354,10 @@ void Matrice::genMatrice()
     {
         for(int j=0;j<taille+1;j++)
         {
-            val[i][j] = qrand()%20;
+            if(aleatoire)
+                val[i][j] = qrand()%20;
+            else
+                val[i][j] = 0;
         }
     }
     setMinimumSize(42*taille,21*taille);
