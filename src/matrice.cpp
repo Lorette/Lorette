@@ -5,7 +5,7 @@ Matrice::Matrice(QWidget *parent) : QWidget(parent)
 {
     this->taille = 1;
     this->m_file = NULL;
-
+    this->m_result = NULL;
     val.resize(taille);
     val[0].resize(taille+1);
 
@@ -152,6 +152,63 @@ void Matrice::methode2()
     float repere;
     QVector<float> inco(taille);
     QVector<float> new_inco(taille);
+    int etape;
+    bool force;
+
+    if(verif_matrice())
+    {
+        QMessageBox::StandardButton ret;
+        ret = QMessageBox::warning(this, "Information",tr("La matrice ne satisfait les conditions pour une méthode de Jacobi.\n"
+                        "Essayer de trouver une solution ?"),
+                                   QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+        if (ret == QMessageBox::Yes)
+            force = true;
+        else if (ret == QMessageBox::Cancel)
+            return;
+    }
+
+    if(force)
+    {
+        bool error = false;
+        QList<float> corres;
+
+        for(int i = 0;i < taille && !error; i++)
+        {
+            int j,value;
+            for(j = 0;j< taille;j++)
+            {
+                value = abs(a[i][j])*2;
+                for(int k = 0;k < taille;k++)
+                    value -= fabs(a[i][k]);
+                if(value >=0 && !corres.contains(j))
+                    break;
+            }
+
+            if(j == taille)
+                error = true;
+            else if(value >= 0)
+            {
+                if(corres.contains(j))
+                    error = true;
+                else
+                    corres << j;
+            }
+        }
+
+        if(error)
+        {
+            QMessageBox::StandardButton ret;
+            ret = QMessageBox::warning(this,"Information",tr("Impossible de trouver une solution.\n""Continuer ?"),QMessageBox::Yes | QMessageBox::No);
+            if(ret == QMessageBox::No)
+                return;
+        }
+        else
+        {
+            for(int i=0; i < corres.count();i++)
+                for(int j = 0; j < taille +1;j++)
+                    a[corres.at(i)][j] = val[i][j];
+        }
+    }
 
     m_result = new Resultat();
     m_result->setWindowTitle("Résultat : Jacobi");
@@ -164,8 +221,9 @@ void Matrice::methode2()
     }
 
 
-    for(int etape = 0;etape < 20;etape++)
+    for(etape = 0;etape < 20;etape++)
     {
+		m_result->ResulatMethode2(inco,"Etape "+QString::number(etape));
         for(int i = 0;i<taille;i++)
         {
             new_inco[i] = a[i][taille];
@@ -174,9 +232,10 @@ void Matrice::methode2()
             new_inco[i] += inco[i];
         }
         inco = new_inco;
-        m_result->ResulatMethode2(inco,"Etape "+QString::number(etape));
 
     }  
+	
+    m_result->ResulatMethode2(inco,"Etape "+QString::number(etape));
     m_result->show();
 }
 
@@ -187,6 +246,63 @@ void Matrice::methode3()
     float _max = 1;
     QVector<float> inco(taille);
     QVector<float> new_inco(taille);
+    int etape;
+    bool force = false;
+
+    if(verif_matrice())
+    {
+        QMessageBox::StandardButton ret;
+        ret = QMessageBox::warning(this, "Information",tr("La matrice ne satisfait les conditions pour une méthode Gauss-Seidel.\n"
+                        "Essayer de trouver une solution ?"),
+                                   QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+        if (ret == QMessageBox::Yes)
+            force = true;
+        else if (ret == QMessageBox::Cancel)
+            return;
+    }
+
+    if(force)
+    {
+        bool error = false;
+        QList<float> corres;
+
+        for(int i = 0;i < taille && !error; i++)
+        {
+            int j,value;
+            for(j = 0;j< taille;j++)
+            {
+                value = abs(a[i][j])*2;
+                for(int k = 0;k < taille;k++)
+                    value -= fabs(a[i][k]);
+                if(value >=0 && !corres.contains(j))
+                    break;
+            }
+
+            if(j == taille)
+                error = true;
+            else if(value >= 0)
+            {
+                if(corres.contains(j))
+                    error = true;
+                else
+                    corres << j;
+            }
+        }
+
+        if(error)
+        {
+            QMessageBox::StandardButton ret;
+            ret = QMessageBox::warning(this,"Information",tr("Impossible de trouver une solution.\n""Continuer ?"),QMessageBox::Yes | QMessageBox::No);
+            if(ret == QMessageBox::No)
+                return;
+        }
+        else
+        {
+            for(int i=0; i < corres.count();i++)
+                for(int j = 0; j < taille +1;j++)
+                    a[corres.at(i)][j] = val[i][j];
+        }
+    }
 
     m_result = new Resultat();
     m_result->setWindowTitle("Résultat : Gauss-Seidel");
@@ -198,9 +314,10 @@ void Matrice::methode3()
             a[i][j] = a[i][j]/repere;
     }
 
-    for(int etape = 0;_max > 0.00005 && etape < 100;etape++)
+    for(etape = 0;_max > 0.005 && etape < 100;etape++)
     {
         _max = 0;
+		m_result->ResulatMethode2(new_inco,"Etape "+QString::number(etape));
         for(int i = 0;i<taille;i++)
         {
             new_inco[i] = a[i][taille];
@@ -212,9 +329,10 @@ void Matrice::methode3()
             _max = (_max > ((new_inco[i]-inco[i])/new_inco[i])) ? _max : ((new_inco[i]-inco[i])/new_inco[i]);
 
         inco = new_inco;
-        m_result->ResulatMethode2(new_inco,"Etape "+QString::number(etape));
+
     }
 
+    m_result->ResulatMethode2(new_inco,"Etape "+QString::number(etape));
     m_result->show();
 }
 
@@ -362,4 +480,24 @@ void Matrice::genMatrice(bool aleatoire)
     }
     setMinimumSize(42*taille,21*taille);
     this->affichMatrice();
+}
+
+bool Matrice::verif_matrice()
+{
+    int value;
+    bool error = false;
+
+    for(int i = 0; i < taille && !error; i++)
+    {
+        value = fabs(val[i][i])*2;
+        for(int j = 0;j < taille; j++)
+            value -= fabs(val[i][j]);
+        if(value < 0)
+            error = true;
+        else
+            value = 0;
+    }
+
+    return error;
+
 }

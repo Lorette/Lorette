@@ -35,13 +35,14 @@ private:
     QAction *newAct,*openAct,*saveAct,*saveAsAct,*exitAct,*addAct,*delAct,*genAAct,*genAct;
     QToolBar *fileToolBar,*toolBar;
     QProgressBar *m_progress;
+    bool matrice_modified;
+    bool mayBeSaved();
 
 
 private slots:
     void actionOuvrir_Matrice_triggered();
-    void actionEnregistrer_Sous_triggered();
-    void actionEnregistrer_triggered();
-    void actionQuitter_triggered();
+    bool actionEnregistrer_Sous_triggered();
+    bool actionEnregistrer_triggered();
     void clickm_button_exec();
     void actionNouvelle_Matrice_triggered();
     void on_radioButton_clicked();

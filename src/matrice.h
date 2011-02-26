@@ -14,6 +14,7 @@
 #include <QLayoutItem>
 #include <QInputDialog>
 #include <QProgressBar>
+#include <qmath.h>
 #include "resultat.h"
 #include "label.h"
 
@@ -47,6 +48,7 @@ public:
     void add_line();
     void del_line();
     void genMatrice(bool aleatoire);
+    bool verif_matrice();
 
 private slots:
     void on_click();

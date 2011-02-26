@@ -17,6 +17,7 @@ Lorette::Lorette(QWidget *parent) : QMainWindow(parent),ui(new Ui::Lorette)
 
     mat = NULL;
     methode = 1;
+    matrice_modified = false;
 }
 
 Lorette::~Lorette()
@@ -39,11 +40,6 @@ Lorette::~Lorette()
 }
 
 
-void Lorette::actionQuitter_triggered()
-{
-    QApplication::quit();
-}
-
 void Lorette::clickm_button_exec()
 {
     if(mat == NULL)
@@ -63,27 +59,27 @@ void Lorette::clickm_button_exec()
     }
 }
 
-void Lorette::actionEnregistrer_triggered()
+bool Lorette::actionEnregistrer_triggered()
 {
     if(mat == NULL)
     {
         QMessageBox::critical(this,"Erreur","Vous devez dabord charger une matrice",QMessageBox::Close);
-        return;
+        return false;
     }
 
     if(mat->getm_file() == NULL)
-        actionEnregistrer_Sous_triggered();
+        return actionEnregistrer_Sous_triggered();
     else
         mat->save();
-
+    return true;
 }
 
-void Lorette::actionEnregistrer_Sous_triggered()
+bool Lorette::actionEnregistrer_Sous_triggered()
 {
     if(mat == NULL)
     {
         QMessageBox::critical(this,"Erreur","Vous devez dabord charger une matrice",QMessageBox::Close);
-        return;
+        return false;
     }
     QString str = QFileDialog::getSaveFileName(0,0,0,"Lorette Files (*.lor)");
     if(str != NULL)
@@ -91,13 +87,19 @@ void Lorette::actionEnregistrer_Sous_triggered()
         mat->setm_file(str);
         this->setWindowTitle(name +" - " +str);
         mat->save();
+        return true;
     }
+    return false;
 
 }
 
 void Lorette::actionOuvrir_Matrice_triggered()
 {
     QString file = QFileDialog::getOpenFileName();
+    if(matrice_modified)
+        if(!mayBeSaved())
+            return;
+
     if(file != "")
     {
         if(mat != NULL)
@@ -115,6 +117,10 @@ void Lorette::actionOuvrir_Matrice_triggered()
 
 void Lorette::actionNouvelle_Matrice_triggered()
 {
+    if(matrice_modified)
+        if(!mayBeSaved())
+            return;
+
     if(mat != NULL)
         delete mat;
 
@@ -123,6 +129,7 @@ void Lorette::actionNouvelle_Matrice_triggered()
     ui->scrollArea->setWidget(mat);
     this->setWindowTitle(name +" - Nouvelle Matrice");
     mat->show();
+    matrice_modified = true;
 }
 
 
@@ -160,7 +167,7 @@ void Lorette::createForm()
     genAct = new QAction(QIcon(":/images/gen.png"), tr("Générer"), this);
     connect(genAct, SIGNAL(triggered()), this, SLOT(actionGen_Matrice()));
 
-    genAAct = new QAction(QIcon(":/images/gen.png"), tr("Générer Aléatoirement"), this);
+    genAAct = new QAction(QIcon(":/images/gen_ale.png"), tr("Générer Aléatoirement"), this);
     connect(genAAct, SIGNAL(triggered()), this, SLOT(actionGen_Matrice_aleatoire()));
 
     addAct = new QAction(QIcon(":/images/add.png"), tr("Ajouter"), this);
@@ -205,16 +212,22 @@ void Lorette::pushButton_clicked()
         actionNouvelle_Matrice_triggered();
 
     mat->add_line();
+    matrice_modified = true;
 }
 
 void Lorette::pushButton_2_clicked()
 {
     if(mat != NULL)
         mat->del_line();
+    matrice_modified = true;
 }
 
 void Lorette::actionGen_Matrice_aleatoire()
 {
+    if(matrice_modified)
+        if(!mayBeSaved())
+            return;
+
     if(mat != NULL)
         delete mat;
 
@@ -224,10 +237,16 @@ void Lorette::actionGen_Matrice_aleatoire()
     setWindowTitle(name +" - Matrice Générée");
     mat->genMatrice(true);
     mat->show();
+
+    matrice_modified = true;
 }
 
 void Lorette::actionGen_Matrice()
 {
+    if(matrice_modified)
+        if(!mayBeSaved())
+            return;
+
     if(mat != NULL)
         delete mat;
 
@@ -237,6 +256,8 @@ void Lorette::actionGen_Matrice()
     setWindowTitle(name +" - Nouvelle Matrice");
     mat->genMatrice(false);
     mat->show();
+
+    matrice_modified = true;
 }
 
 void Lorette::progress_value_changed(int value)
@@ -246,6 +267,10 @@ void Lorette::progress_value_changed(int value)
 
 void Lorette::delete_matrice()
 {
+    if(matrice_modified)
+        if(!mayBeSaved())
+            return;
+
     if(mat != NULL)
         delete mat;
 
@@ -257,5 +282,25 @@ void Lorette::delete_matrice()
 
 void Lorette::closeEvent(QCloseEvent *event)
 {
-    QMessageBox::information(0,"TODO","...");
+    if(matrice_modified)
+        if(!mayBeSaved())
+            event->ignore();
+}
+
+bool Lorette::mayBeSaved()
+{
+    QMessageBox::StandardButton ret;
+    ret = QMessageBox::warning(this,"Information",tr("La matrice a été modifiée.\n""Voulez-vous sauvegarder les modifications ?"),QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    if(ret == QMessageBox::Save)
+    {    if(!actionEnregistrer_triggered())
+            return false;
+         else
+             matrice_modified = false;
+    }
+    else if(ret == QMessageBox::Cancel)
+        return false;
+    else
+        matrice_modified = false;
+
+    return true;
 }

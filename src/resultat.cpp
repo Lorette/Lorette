@@ -22,7 +22,7 @@ void Resultat::ResulatMethode1(QVector< QVector<float> > mat,QString name)
     QScrollArea *m_scroll = new QScrollArea(this);
     QWidget *m_widget = WidgetMethode1(mat,m_scroll);
 
-    m_widget->setMinimumSize(42*mat.size(),21*mat.size());
+    m_widget->setMinimumSize(60*mat.size(),28.5*mat.size());
     m_scroll->setWidget(m_widget);
 
     ui->tabWidget->addTab(m_scroll,name);
@@ -36,20 +36,19 @@ void Resultat::ResulatMethode1(QVector< QVector<float> > mat,QString name)
 QWidget* Resultat::WidgetMethode1(QVector<QVector<float> > mat,QWidget *parent)
 {
     QWidget *widget = new QWidget(parent);
-    QLabel *m_label;
+    QLabel *m_label = new QLabel(widget);
 
     for(int i = 0;i < mat.size();i++)
     {
         for(int j = 0;j < mat[i].size();j++)
-        {
-            m_label = new QLabel(parent);
-            m_label->setText(QString::number(mat[i][j]));
-            m_label->setGeometry(QRect(40*j+52,20*i+10,40,20));
-            m_label->show();
-            m_list << m_label;
-        }
-
+            m_label->setText(m_label->text() +"       " +QString::number(mat[i][j]));
+        m_label->setText(m_label->text()+"\n\n");
     }
+
+    m_label->setGeometry(QRect(27,25,60*(mat.size()+1),28.5*mat.size()));
+    m_label->show();
+    m_list << m_label;
+
     widget->show();
     return widget;
 }
@@ -59,7 +58,7 @@ void Resultat::ResulatMethode2(QVector<float> inco,QString name)
     QScrollArea *m_scroll = new QScrollArea(this);
     QWidget *m_widget = WidgetMethode2(inco,m_scroll);
 
-    m_widget->setMinimumSize(42*inco.size(),21*inco.size());
+    m_widget->setMinimumSize(350,28.5*inco.size());
     m_scroll->setWidget(m_widget);
 
     ui->tabWidget->addTab(m_scroll,name);
@@ -73,16 +72,17 @@ void Resultat::ResulatMethode2(QVector<float> inco,QString name)
 QWidget* Resultat::WidgetMethode2(QVector<float> inco,QWidget *parent)
 {
     QWidget *widget = new QWidget(parent);
-    QLabel *m_label;
+    QLabel *m_label = new QLabel(widget);
 
     for(int i = 0;i < inco.size();i++)
     {
-        m_label = new QLabel(parent);
-        m_label->setText("Inconnue n° "+QString::number(i+1) +" = " +QString::number(inco[i]));
-        m_label->setGeometry(QRect(52,20*i+10,200,20));
-        m_label->show();
-        m_list << m_label;
+        m_label->setText(m_label->text() +"Inconnue n° "+QString::number(i+1) +" = " +QString::number(inco[i]) +"\n\n");
     }
+
+    m_label->setGeometry(QRect(40,25,350,29*inco.size()));
+    m_label->show();
+    m_list << m_label;
+
     widget->show();
     return widget;
 }
