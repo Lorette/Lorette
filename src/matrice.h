@@ -17,24 +17,26 @@
 #include <qmath.h>
 #include "resultat.h"
 #include "label.h"
+#include "settings.h"
 
 class Matrice : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit Matrice(QWidget *parent);
-    explicit Matrice(QWidget *parent,QString f);
+    explicit Matrice(QWidget *parent,Settings *settings);
+    explicit Matrice(QWidget *parent,QString f,Settings *settings);
     ~Matrice();
 
 private:
     QFile *m_file;
-    int taille;
     QVector< QVector<float> > val;
     QSpinBox *m_spin;
-    Label *m_label_modifying;
     QVector< QVector<Label*> > m_label;
     Resultat *m_result;
+    Label *m_label_modifying;
+    Settings *set;
+    int taille;
 
 public:
     QFile *getm_file();

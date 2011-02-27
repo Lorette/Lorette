@@ -8,6 +8,8 @@
         <file>images/save.png</file>
         <file>images/save-as.png</file>
         <file>images/gen.png</file>
-		<file>images/gen_ale.png</file>
+        <file>images/gen_ale.png</file>
+        <file>images/Lorette.png</file>
+        <file>images/options.png</file>
     </qresource>
 </RCC>

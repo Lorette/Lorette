@@ -1,8 +1,9 @@
 #include "lorette.h"
 #include "ui_lorette.h"
+#include "ui_settings.h"
 
 
-Lorette::Lorette(QWidget *parent) : QMainWindow(parent),ui(new Ui::Lorette)
+Lorette::Lorette(QWidget *parent) : QMainWindow(parent),ui(new Ui::Lorette),set(new Settings(this))
 {
     ui->setupUi(this);
     name = this->windowTitle();
@@ -14,7 +15,7 @@ Lorette::Lorette(QWidget *parent) : QMainWindow(parent),ui(new Ui::Lorette)
 
     connect(m_button_exec,SIGNAL(clicked()),this,SLOT(clickm_button_exec()));
     connect(m_button_quit,SIGNAL(clicked()),this,SLOT(close()));
-
+    connect(set,SIGNAL(closeW()),this,SLOT(closeSettings()));
     mat = NULL;
     methode = 1;
     matrice_modified = false;
@@ -37,6 +38,8 @@ Lorette::~Lorette()
     delete delAct;
     delete fileToolBar;
     delete toolBar;
+    delete set;
+    delete aboutAct;
 }
 
 
@@ -57,6 +60,7 @@ void Lorette::clickm_button_exec()
         case 3 : mat->methode3();
             break;
     }
+
 }
 
 bool Lorette::actionEnregistrer_triggered()
@@ -105,7 +109,7 @@ void Lorette::actionOuvrir_Matrice_triggered()
         if(mat != NULL)
             delete mat;
 
-        mat = new Matrice(ui->scrollArea,file);
+        mat = new Matrice(ui->scrollArea,file,set);
         connect(mat,SIGNAL(progress_value_changed(int)),this,SLOT(progress_value_changed(int)));
         ui->scrollArea->setWidget(mat);
         mat->show();
@@ -124,7 +128,7 @@ void Lorette::actionNouvelle_Matrice_triggered()
     if(mat != NULL)
         delete mat;
 
-    mat = new Matrice(ui->scrollArea);
+    mat = new Matrice(ui->scrollArea,set);
     connect(mat,SIGNAL(progress_value_changed(int)),this,SLOT(progress_value_changed(int)));
     ui->scrollArea->setWidget(mat);
     this->setWindowTitle(name +" - Nouvelle Matrice");
@@ -176,6 +180,12 @@ void Lorette::createForm()
     delAct = new QAction(QIcon(":/images/del.png"), tr("Supprimer"), this);
     connect(delAct, SIGNAL(triggered()), this, SLOT(pushButton_2_clicked()));
 
+    setAct = new QAction(QIcon(":/images/options.png"), tr("Options"), this);
+    connect(setAct, SIGNAL(triggered()), this, SLOT(actionSettings()));
+
+    aboutAct = new QAction(QIcon(":/images/Lorette.png"), tr("A Propos"), this);
+    connect(aboutAct, SIGNAL(triggered()), this, SLOT(actionAbout()));
+
     fileToolBar->addAction(newAct);
     fileToolBar->addAction(openAct);
     fileToolBar->addAction(saveAct);
@@ -183,6 +193,9 @@ void Lorette::createForm()
     fileToolBar->addAction(exitAct);
     fileToolBar->addSeparator();
     fileToolBar->addWidget(m_progress);
+    fileToolBar->addSeparator();
+    fileToolBar->addAction(setAct);
+    fileToolBar->addAction(aboutAct);
     toolBar->addAction(addAct);
     toolBar->addAction(delAct);
     toolBar->addSeparator();
@@ -231,7 +244,7 @@ void Lorette::actionGen_Matrice_aleatoire()
     if(mat != NULL)
         delete mat;
 
-    mat = new Matrice(ui->scrollArea);
+    mat = new Matrice(ui->scrollArea,set);
     connect(mat,SIGNAL(progress_value_changed(int)),this,SLOT(progress_value_changed(int)));
     ui->scrollArea->setWidget(mat);
     setWindowTitle(name +" - Matrice Générée");
@@ -250,7 +263,7 @@ void Lorette::actionGen_Matrice()
     if(mat != NULL)
         delete mat;
 
-    mat = new Matrice(ui->scrollArea);
+    mat = new Matrice(ui->scrollArea,set);
     connect(mat,SIGNAL(progress_value_changed(int)),this,SLOT(progress_value_changed(int)));
     ui->scrollArea->setWidget(mat);
     setWindowTitle(name +" - Nouvelle Matrice");
@@ -303,4 +316,22 @@ bool Lorette::mayBeSaved()
         matrice_modified = false;
 
     return true;
+}
+
+
+void Lorette::actionSettings()
+{
+    this->setDisabled(true);
+    set->setEnabled(true);
+    set->show();
+}
+
+void Lorette::closeSettings()
+{
+    this->setEnabled(true);
+}
+
+void Lorette::actionAbout()
+{
+    QMessageBox::information(this,"A Propos","A Propos",QMessageBox::Close);
 }

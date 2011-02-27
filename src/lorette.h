@@ -8,7 +8,9 @@
 #include <QFileDialog>
 #include <QToolBar>
 #include <QProgressBar>
+#include <QSettings>
 #include "matrice.h"
+#include "settings.h"
 
 namespace Ui {
     class Lorette;
@@ -27,12 +29,13 @@ protected:
     void closeEvent(QCloseEvent *event);
 
 private:
-    Matrice *mat;
     Ui::Lorette *ui;
+    Matrice *mat;
+    Settings *set;
     int methode;
     QString name;
     QPushButton *m_button_exec,*m_button_quit;
-    QAction *newAct,*openAct,*saveAct,*saveAsAct,*exitAct,*addAct,*delAct,*genAAct,*genAct;
+    QAction *newAct,*openAct,*saveAct,*saveAsAct,*exitAct,*addAct,*delAct,*genAAct,*genAct,*setAct,*aboutAct;
     QToolBar *fileToolBar,*toolBar;
     QProgressBar *m_progress;
     bool matrice_modified;
@@ -54,6 +57,9 @@ private slots:
     void actionGen_Matrice_aleatoire();
     void progress_value_changed(int value);
     void delete_matrice();
+    void actionSettings();
+    void actionAbout();
+    void closeSettings();
 };
 
 #endif // LORETTE_H

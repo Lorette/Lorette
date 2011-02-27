@@ -89,5 +89,6 @@ QWidget* Resultat::WidgetMethode2(QVector<float> inco,QWidget *parent)
 
 void Resultat::closeEvent(QCloseEvent *event)
 {
+
     this->deleteLater();
 }

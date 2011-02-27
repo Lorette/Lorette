@@ -1,7 +1,7 @@
 #include "matrice.h"
 
 
-Matrice::Matrice(QWidget *parent) : QWidget(parent)
+Matrice::Matrice(QWidget *parent,Settings *settings) : QWidget(parent), set(settings)
 {
     this->taille = 1;
     this->m_file = NULL;
@@ -12,7 +12,7 @@ Matrice::Matrice(QWidget *parent) : QWidget(parent)
     this->createMatrice();
 }
 
-Matrice::Matrice(QWidget *parent,QString f) : QWidget(parent)
+Matrice::Matrice(QWidget *parent,QString f,Settings *settings) : QWidget(parent),set(settings)
 {
     QString str;
 
@@ -100,17 +100,14 @@ void Matrice::methode1()
 {
     QVector< QVector<float> > a = this->val;
     QVector<float> result(taille);
-    int etape;
-    int pivot;
-    int repere;
+    int pivot,repere;
 
     m_result = new Resultat();
     m_result->setWindowTitle("Résultat : Pivot de Gauss");
 
-    for(etape = 0;etape<taille-1;etape++)
+    for(int etape = 0;etape<taille-1;etape++)
     {
         pivot = a[etape][etape];
-        m_result->ResulatMethode1(a,"Etape " +QString::number(etape));
         for(int i = etape+1;i < taille;i++)
         {
             repere = a[i][etape];
@@ -119,10 +116,10 @@ void Matrice::methode1()
 
         }
         emit(progress_value_changed((int)(((float)etape/(float)taille)*100)));
+        if(set->getSteps())
+            m_result->ResulatMethode1(a,"Etape " +QString::number(etape+1));
+
     }
-
-    m_result->ResulatMethode1(a,"Etape " +QString::number(etape));
-
 
     for(int i = taille-1;i >= 0;i--)
     {
@@ -138,7 +135,7 @@ void Matrice::methode1()
         emit(progress_value_changed((int)(((float)i/(float)taille)*100)));
     }
 
-    m_result->ResulatMethode2(result,"Final ");
+    m_result->ResulatMethode2(result,"Final");
 
     m_result->show();
 
@@ -149,10 +146,9 @@ void Matrice::methode1()
 void Matrice::methode2()
 {
     QVector< QVector<float> > a = this->val;
-    float repere;
+    float repere,_max = 1;
     QVector<float> inco(taille);
     QVector<float> new_inco(taille);
-    int etape;
     bool force;
 
     if(verif_matrice())
@@ -174,7 +170,7 @@ void Matrice::methode2()
 
         for(int i = 0;i < taille && !error; i++)
         {
-            int j,value;
+            int j,value = 0;
             for(j = 0;j< taille;j++)
             {
                 value = abs(a[i][j])*2;
@@ -221,9 +217,9 @@ void Matrice::methode2()
     }
 
 
-    for(etape = 0;etape < 20;etape++)
+    for(int etape = 0;_max > 0.005 && etape < 100;etape++)
     {
-		m_result->ResulatMethode2(inco,"Etape "+QString::number(etape));
+        _max = 0;
         for(int i = 0;i<taille;i++)
         {
             new_inco[i] = a[i][taille];
@@ -231,11 +227,16 @@ void Matrice::methode2()
                 new_inco[i] = new_inco[i] - a[i][j]*inco[j];
             new_inco[i] += inco[i];
         }
+        for(int i = 0; i < taille;i++)
+            _max = (_max > fabs((new_inco[i]-inco[i])/new_inco[i])) ? _max : fabs((new_inco[i]-inco[i])/new_inco[i]);
+
         inco = new_inco;
+        if(set->getSteps())
+            m_result->ResulatMethode2(inco,"Etape "+QString::number(etape+1));
 
     }  
 	
-    m_result->ResulatMethode2(inco,"Etape "+QString::number(etape));
+    m_result->ResulatMethode2(inco,"Final");
     m_result->show();
 }
 
@@ -246,7 +247,6 @@ void Matrice::methode3()
     float _max = 1;
     QVector<float> inco(taille);
     QVector<float> new_inco(taille);
-    int etape;
     bool force = false;
 
     if(verif_matrice())
@@ -268,7 +268,7 @@ void Matrice::methode3()
 
         for(int i = 0;i < taille && !error; i++)
         {
-            int j,value;
+            int j,value = 0;
             for(j = 0;j< taille;j++)
             {
                 value = abs(a[i][j])*2;
@@ -314,10 +314,9 @@ void Matrice::methode3()
             a[i][j] = a[i][j]/repere;
     }
 
-    for(etape = 0;_max > 0.005 && etape < 100;etape++)
+    for(int etape = 0;_max > 0.005 && etape < 100;etape++)
     {
         _max = 0;
-		m_result->ResulatMethode2(new_inco,"Etape "+QString::number(etape));
         for(int i = 0;i<taille;i++)
         {
             new_inco[i] = a[i][taille];
@@ -326,13 +325,15 @@ void Matrice::methode3()
                     new_inco[i] = new_inco[i] - a[i][j]*new_inco[j];
         }
         for(int i = 0; i < taille;i++)
-            _max = (_max > ((new_inco[i]-inco[i])/new_inco[i])) ? _max : ((new_inco[i]-inco[i])/new_inco[i]);
+            _max = (_max > fabs((new_inco[i]-inco[i])/new_inco[i])) ? _max : fabs((new_inco[i]-inco[i])/new_inco[i]);
 
         inco = new_inco;
+        if(set->getSteps())
+            m_result->ResulatMethode2(new_inco,"Etape "+QString::number(etape+1));
 
     }
 
-    m_result->ResulatMethode2(new_inco,"Etape "+QString::number(etape));
+    m_result->ResulatMethode2(new_inco,"Final");
     m_result->show();
 }
 
@@ -499,5 +500,4 @@ bool Matrice::verif_matrice()
     }
 
     return error;
-
 }

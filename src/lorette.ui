@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Lorette</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../lorette.qrc">
+    <normaloff>:/images/Lorette.png</normaloff>:/images/Lorette.png</iconset>
+  </property>
   <property name="documentMode">
    <bool>true</bool>
   </property>
@@ -95,6 +99,8 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="../lorette.qrc"/>
+ </resources>
  <connections/>
 </ui>
