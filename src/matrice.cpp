@@ -155,11 +155,13 @@ void Matrice::methode2()
     {
         QMessageBox::StandardButton ret;
         ret = QMessageBox::warning(this, "Information",tr("La matrice ne satisfait les conditions pour une méthode de Jacobi.\n"
-                        "Essayer de trouver une solution ?"),
+                        "Elle n'est pas à diagionale strictement dominante.\n""Voulez vous essayer de la transformer ?"),
                                    QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
         if (ret == QMessageBox::Yes)
             force = true;
-        else if (ret == QMessageBox::Cancel)
+        else if (ret == QMessageBox::No)
+                new_inco = askStartValue();
+        else
             return;
     }
 
@@ -194,9 +196,13 @@ void Matrice::methode2()
         if(error)
         {
             QMessageBox::StandardButton ret;
-            ret = QMessageBox::warning(this,"Information",tr("Impossible de trouver une solution.\n""Continuer ?"),QMessageBox::Yes | QMessageBox::No);
-            if(ret == QMessageBox::No)
+            ret = QMessageBox::warning(this,"Information",tr("La matrice ne peut pas être transformé pour satisfaire la condition.\n""Il vous faut entrer le vecteur de départ.\n"),QMessageBox::Ok | QMessageBox::Cancel);
+            if(ret == QMessageBox::Cancel)
                 return;
+            else
+            {
+                inco = askStartValue();
+            }
         }
         else
         {
@@ -252,12 +258,14 @@ void Matrice::methode3()
     if(verif_matrice())
     {
         QMessageBox::StandardButton ret;
-        ret = QMessageBox::warning(this, "Information",tr("La matrice ne satisfait les conditions pour une méthode Gauss-Seidel.\n"
-                        "Essayer de trouver une solution ?"),
+        ret = QMessageBox::warning(this, "Information",tr("La matrice ne satisfait les conditions pour une méthode de Gauss-Seidel.\n"
+                        "Elle n'est pas à diagionale strictement dominante.\n""Voulez vous essayer de la transformer ?"),
                                    QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
         if (ret == QMessageBox::Yes)
             force = true;
-        else if (ret == QMessageBox::Cancel)
+        else if (ret == QMessageBox::No)
+                new_inco = askStartValue();
+        else
             return;
     }
 
@@ -292,9 +300,11 @@ void Matrice::methode3()
         if(error)
         {
             QMessageBox::StandardButton ret;
-            ret = QMessageBox::warning(this,"Information",tr("Impossible de trouver une solution.\n""Continuer ?"),QMessageBox::Yes | QMessageBox::No);
-            if(ret == QMessageBox::No)
+            ret = QMessageBox::warning(this,"Information",tr("La matrice ne peut pas être transformé pour satisfaire la condition.\n""Il vous faut entrer le vecteur de départ.\n"),QMessageBox::Ok | QMessageBox::Cancel);
+            if(ret == QMessageBox::Cancel)
                 return;
+
+            new_inco = askStartValue();
         }
         else
         {
@@ -314,7 +324,7 @@ void Matrice::methode3()
             a[i][j] = a[i][j]/repere;
     }
 
-    for(int etape = 0;_max > 0.005 && etape < 100;etape++)
+    for(int etape = 0;/*_max > 0.005 && */etape < 8;etape++)
     {
         _max = 0;
         for(int i = 0;i<taille;i++)
@@ -500,4 +510,13 @@ bool Matrice::verif_matrice()
     }
 
     return error;
+}
+
+QVector<float> Matrice::askStartValue()
+{
+   QList<float> a;
+
+   for(int i = 0;i< taille;i++)
+       a << QInputDialog::getInt(this,tr("Vecteur de départ"),tr("Entrez la valeur du vecteur de départ"));
+   return a.toVector();
 }

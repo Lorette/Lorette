@@ -99,10 +99,11 @@ bool Lorette::actionEnregistrer_Sous_triggered()
 
 void Lorette::actionOuvrir_Matrice_triggered()
 {
-    QString file = QFileDialog::getOpenFileName();
     if(matrice_modified)
         if(!mayBeSaved())
             return;
+    QString file = QFileDialog::getOpenFileName();
+
 
     if(file != "")
     {

@@ -51,6 +51,7 @@ public:
     void del_line();
     void genMatrice(bool aleatoire);
     bool verif_matrice();
+    QVector<float> askStartValue();
 
 private slots:
     void on_click();
