@@ -39,14 +39,20 @@ public:
 private:
     Ui::Settings *ui;
     bool steps;
+    int _max;
+    double prec;
 
 public:
     void closeEvent(QCloseEvent *event);
     bool getSteps();
+    int get_Max();
+    double getprec();
     void writeSettings();
     void readSettings();
 
 private slots:
+    void on_prec_valueChanged(double );
+    void on__max_valueChanged(int value);
     void on_steps_clicked(bool checked);
 
 signals:

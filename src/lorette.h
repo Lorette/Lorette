@@ -45,9 +45,6 @@ public:
     ~Lorette();
     void createForm();
 
-protected:
-    void closeEvent(QCloseEvent *event);
-
 private:
     Ui::Lorette *ui;
     Matrice *mat;
@@ -58,8 +55,6 @@ private:
     QAction *newAct,*openAct,*saveAct,*saveAsAct,*exitAct,*addAct,*delAct,*genAAct,*genAct,*setAct,*aboutAct;
     QToolBar *fileToolBar,*toolBar;
     QProgressBar *m_progress;
-    bool matrice_modified;
-    bool mayBeSaved();
 
 
 private slots:

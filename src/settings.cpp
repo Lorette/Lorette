@@ -28,9 +28,6 @@ Settings::Settings(QWidget *parent) : QWidget(parent),ui(new Ui::Settings)
     connect(ui->close,SIGNAL(clicked()),this,SLOT(close()));
     readSettings();
 
-    ui->steps->setChecked(steps);
-
-
 }
 Settings::~Settings()
 {
@@ -40,6 +37,17 @@ Settings::~Settings()
 void Settings::on_steps_clicked(bool checked)
 {
     steps = checked;
+}
+
+void Settings::on__max_valueChanged(int value)
+{
+    _max = value;
+}
+
+
+void Settings::on_prec_valueChanged(double value)
+{
+    prec = value;
 }
 
 void Settings::closeEvent(QCloseEvent *event)
@@ -54,11 +62,23 @@ bool Settings::getSteps()
     return steps;
 }
 
+int Settings::get_Max()
+{
+    return _max;
+}
+
+double Settings::getprec()
+{
+    return prec;
+}
+
 void Settings::writeSettings()
 {
     QSettings settings("Lorette Inc", "Lorette");
     settings.beginGroup("Settings");
     settings.setValue("steps", steps);
+    settings.setValue("_max", _max);
+    settings.setValue("prec", prec);
     settings.endGroup();
 }
 
@@ -67,4 +87,11 @@ void Settings::readSettings()
     QSettings settings("Lorette Inc", "Lorette");
     settings.beginGroup("Settings");
     steps = settings.value("steps").toBool();
+    _max = settings.value("_max").toInt();
+    prec = settings.value("prec").toDouble();
+    settings.endGroup();
+
+    ui->steps->setChecked(steps);
+    ui->_max->setValue(_max);
+    ui->prec->setValue(prec);
 }

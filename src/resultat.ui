@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../lorette.qrc">
+    <normaloff>:/images/Lorette.png</normaloff>:/images/Lorette.png</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QTabWidget" name="tabWidget">
@@ -33,6 +37,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../lorette.qrc"/>
+ </resources>
  <connections/>
 </ui>
