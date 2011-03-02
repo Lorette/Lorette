@@ -242,8 +242,7 @@ void Matrice::methode2()
             a[i][j] = a[i][j]/repere;
     }
 
-
-    for(int etape = 0;_max > 0.005 && etape < 100;etape++)
+    for(int etape = 0;_max > set->getprec() && etape < set->get_Max();etape++)
     {
         _max = 0;
         for(int i = 0;i<taille;i++)
@@ -344,7 +343,7 @@ void Matrice::methode3()
             a[i][j] = a[i][j]/repere;
     }
 
-    for(int etape = 0;/*_max > 0.005 && */etape < 8;etape++)
+    for(int etape = 0;_max > set->getprec() && etape < set->get_Max();etape++)
     {
         _max = 0;
         for(int i = 0;i<taille;i++)
