@@ -38,7 +38,6 @@ Lorette::Lorette(QWidget *parent) : QMainWindow(parent),ui(new Ui::Lorette),set(
     connect(set,SIGNAL(closeW()),this,SLOT(closeSettings()));
     mat = NULL;
     methode = 1;
-    matrice_modified = false;
 }
 
 Lorette::~Lorette()
@@ -119,9 +118,6 @@ bool Lorette::actionEnregistrer_Sous_triggered()
 
 void Lorette::actionOuvrir_Matrice_triggered()
 {
-    if(matrice_modified)
-        if(!mayBeSaved())
-            return;
     QString file = QFileDialog::getOpenFileName();
 
 
@@ -142,10 +138,6 @@ void Lorette::actionOuvrir_Matrice_triggered()
 
 void Lorette::actionNouvelle_Matrice_triggered()
 {
-    if(matrice_modified)
-        if(!mayBeSaved())
-            return;
-
     if(mat != NULL)
         delete mat;
 
@@ -154,7 +146,6 @@ void Lorette::actionNouvelle_Matrice_triggered()
     ui->scrollArea->setWidget(mat);
     this->setWindowTitle(name +" - Nouvelle Matrice");
     mat->show();
-    matrice_modified = true;
 }
 
 
@@ -246,22 +237,15 @@ void Lorette::pushButton_clicked()
         actionNouvelle_Matrice_triggered();
 
     mat->add_line();
-    matrice_modified = true;
 }
 
 void Lorette::pushButton_2_clicked()
 {
     if(mat != NULL)
-        mat->del_line();
-    matrice_modified = true;
-}
+        mat->del_line();}
 
 void Lorette::actionGen_Matrice_aleatoire()
 {
-    if(matrice_modified)
-        if(!mayBeSaved())
-            return;
-
     if(mat != NULL)
         delete mat;
 
@@ -271,16 +255,10 @@ void Lorette::actionGen_Matrice_aleatoire()
     setWindowTitle(name +" - Matrice Générée");
     mat->genMatrice(true);
     mat->show();
-
-    matrice_modified = true;
 }
 
 void Lorette::actionGen_Matrice()
 {
-    if(matrice_modified)
-        if(!mayBeSaved())
-            return;
-
     if(mat != NULL)
         delete mat;
 
@@ -290,8 +268,6 @@ void Lorette::actionGen_Matrice()
     setWindowTitle(name +" - Nouvelle Matrice");
     mat->genMatrice(false);
     mat->show();
-
-    matrice_modified = true;
 }
 
 void Lorette::progress_value_changed(int value)
@@ -301,10 +277,6 @@ void Lorette::progress_value_changed(int value)
 
 void Lorette::delete_matrice()
 {
-    if(matrice_modified)
-        if(!mayBeSaved())
-            return;
-
     if(mat != NULL)
         delete mat;
 
@@ -313,32 +285,6 @@ void Lorette::delete_matrice()
     this->setWindowTitle(name);
     ui->scrollArea->setWidget(new QWidget());
 }
-
-void Lorette::closeEvent(QCloseEvent *event)
-{
-    if(matrice_modified)
-        if(!mayBeSaved())
-            event->ignore();
-}
-
-bool Lorette::mayBeSaved()
-{
-    QMessageBox::StandardButton ret;
-    ret = QMessageBox::warning(this,"Information",tr("La matrice a été modifiée.\n""Voulez-vous sauvegarder les modifications ?"),QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-    if(ret == QMessageBox::Save)
-    {    if(!actionEnregistrer_triggered())
-            return false;
-         else
-             matrice_modified = false;
-    }
-    else if(ret == QMessageBox::Cancel)
-        return false;
-    else
-        matrice_modified = false;
-
-    return true;
-}
-
 
 void Lorette::actionSettings()
 {
@@ -354,5 +300,15 @@ void Lorette::closeSettings()
 
 void Lorette::actionAbout()
 {
-    QMessageBox::information(this,"A Propos","A Propos",QMessageBox::Close);
+    QDialog* action_propos = new QDialog(this);
+    QPushButton *close = new QPushButton("Fermer");
+    connect(close,SIGNAL(clicked()),action_propos,SLOT(deleteLater()));
+    QVBoxLayout *layout = new QVBoxLayout;
+    QString propos = "<strong>Projet Lorette</strong>:<br/><br/><u><i>Réalisé par</i></u>:<ul><li>Brice Dureuil</li><li>Nicolas BOQUET</li><li>Fabien RONGIARD</li></ul><br/><i><u>Programme codé sous Licence <b>GNU GPL</b></u></i><br /><i><u>Language de programmation utilisé</u></i>:<ul><li>Langage C++</li></ul><br/><u><i>Framework utilisé</u></i>:<ul><li>Qt 4.7</li></ul><br/><br/>Pour de plus amples informations visitez notre <a href=\"http://94.23.244.98/lorette/\">site web</a>.";
+    QLabel *text = new QLabel(propos);
+    layout->addWidget(text);
+    layout->addWidget(close,0,Qt::AlignRight);
+    action_propos->setLayout(layout);
+    action_propos->setFixedSize(300,350);
+    action_propos->show();
 }
