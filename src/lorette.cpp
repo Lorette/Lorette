@@ -304,11 +304,11 @@ void Lorette::actionAbout()
     QPushButton *close = new QPushButton("Fermer");
     connect(close,SIGNAL(clicked()),action_propos,SLOT(deleteLater()));
     QVBoxLayout *layout = new QVBoxLayout;
-    QString propos = "<strong>Projet Lorette</strong>:<br/><br/><u><i>Réalisé par</i></u>:<ul><li>Brice Dureuil</li><li>Nicolas BOQUET</li><li>Fabien RONGIARD</li></ul><br/><i><u>Programme codé sous Licence <b>GNU GPL</b></u></i><br /><i><u>Language de programmation utilisé</u></i>:<ul><li>Langage C++</li></ul><br/><u><i>Framework utilisé</u></i>:<ul><li>Qt 4.7</li></ul><br/><br/>Pour de plus amples informations visitez notre <a href=\"http://94.23.244.98/lorette/\">site web</a>.";
+    QString propos = "<strong>Projet Lorette</strong>:<br/><br/><u><b><i>It's the place to be.</i></b></u><br/><br/><u><i>Réalisé par</i></u>:<ul><li>Brice DUREUIL</li><li>Nicolas BOQUET</li><li>Fabien RONGIARD</li></ul><br/><i><u>Programme developpé sous Licence <b>GNU GPL</b></u></i><br/><br/><i><u>Language de programmation utilisé</u></i>:<ul><li>Langage C++</li></ul><br/><u><i>Framework utilisé</u></i>:<ul><li>Qt 4.7</li></ul><br/><br/>Pour de plus amples informations visitez notre <a href=\"http://94.23.244.98/lorette/\">site web</a>.";
     QLabel *text = new QLabel(propos);
     layout->addWidget(text);
     layout->addWidget(close,0,Qt::AlignRight);
     action_propos->setLayout(layout);
-    action_propos->setFixedSize(300,350);
+    action_propos->setFixedSize(300,400);
     action_propos->show();
 }
