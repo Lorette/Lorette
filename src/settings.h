@@ -51,7 +51,7 @@ public:
     void readSettings();
 
 private slots:
-    void on_prec_valueChanged(double );
+    void on_prec_valueChanged(double value);
     void on__max_valueChanged(int value);
     void on_steps_clicked(bool checked);
 

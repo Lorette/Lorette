@@ -42,7 +42,7 @@ void Resultat::ResulatMethode1(QVector< QVector<float> > mat,QString name)
     QScrollArea *m_scroll = new QScrollArea(this);
     QWidget *m_widget = WidgetMethode1(mat,m_scroll);
 
-    m_widget->setMinimumSize(60*mat.size(),28.5*mat.size());
+    m_widget->setMinimumSize(60*mat.size()+27,28.5*mat.size()+25);
     m_scroll->setWidget(m_widget);
 
     ui->tabWidget->addTab(m_scroll,name);
@@ -77,8 +77,7 @@ void Resultat::ResulatMethode2(QVector<float> inco,QString name)
 {
     QScrollArea *m_scroll = new QScrollArea(this);
     QWidget *m_widget = WidgetMethode2(inco,m_scroll);
-
-    m_widget->setMinimumSize(350,28.5*inco.size());
+    m_widget->setMinimumSize(350+40,28.5*inco.size()+25);
     m_scroll->setWidget(m_widget);
 
     ui->tabWidget->addTab(m_scroll,name);
