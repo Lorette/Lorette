@@ -1,1 +1,1 @@
-qmake lorette.pro -r -spec linux-g++
+qmake lorette.pro -r -spec linux-g++ CONFIG+=release
