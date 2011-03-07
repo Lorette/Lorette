@@ -1,0 +1,14 @@
+INPUT(
+./release/label.o
+./release/lorette.o
+./release/main.o
+./release/matrice.o
+./release/resultat.o
+./release/settings.o
+./release/moc_label.o
+./release/moc_lorette.o
+./release/moc_matrice.o
+./release/moc_resultat.o
+./release/moc_settings.o
+./release/qrc_lorette.o
+);
